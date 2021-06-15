@@ -137,7 +137,7 @@ router.post('/register', function(req, res){
             return res.redirect('/login');
         }
         passport.authenticate('local')(req, res, function(){
-            res.redirect('/');
+            res.redirect(req.session.fromUrl);
         });
     });
 });

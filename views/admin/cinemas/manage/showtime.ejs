@@ -74,7 +74,6 @@
             <div class="col-xl-4">
                 <h5 class="my-3">Select movie</h5>
                 <select class="form-select form-select-lg" name="showtime[movie]" required>
-                    <option selected class="text-secondary">--none--</option>
                     <% cinema.movies.forEach(function(movie){ %>
                     <option  value="<%= movie._id %>"><%= movie.name %></option>
                     <% }); %>

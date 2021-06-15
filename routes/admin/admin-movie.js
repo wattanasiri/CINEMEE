@@ -75,7 +75,7 @@ router.get('/:id/info', function(req, res){
 });
 
 router.delete('/:id/removeReview/:review_id', function(req, res){
-    Review.findByIdAndRemove(req.params.reviews_id, function(err, deleteReview){
+    Review.findByIdAndRemove(req.params.review_id, function(err, deleteReview){
         if(err){
             res.redirect('back');
         }else{
@@ -84,16 +84,15 @@ router.delete('/:id/removeReview/:review_id', function(req, res){
                     console.log(err);
                 }else{
                     var check = false;
-                    for(i=1; i <= foundMovie.rating.length; i++){
-                        if(check){
-                            console.log('skip')                       
+                    for(i=0; i < foundMovie.rating.length; i++){
+                        if(check){                      
                         }else if(deleteReview.rating === foundMovie.rating[i]){
-                            foundMovie.rating.splice(i, 1);
+                            foundMovie.rating.splice(i, 1)
                             foundMovie.save();
-                            return check = true;
+                            check = true
                         }
                     }
-                    res.redirect('/movie/' + req.params.id);                   
+                    res.redirect('back');                   
                 }
             });            
         }

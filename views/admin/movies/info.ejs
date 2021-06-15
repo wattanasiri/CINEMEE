@@ -1,29 +1,42 @@
 <%- include('../../partials/headerAdmin.ejs') %>
 
-<div class="mx-md-5 px-md-5 shadow py-5">
+<div class="container px-5 shadow py-5">
     <div class="row">
-        <div class="col-1"></div>
-        <div class="col-xxl-4 col-md-5 ">
-            <h1 class=" fw-bold"><a href="/admin/movie"><i class="far fa-chevron-left fw-bold pe-2 back-link" aria-hidden="true"></i></a><%= movie.name %></h1>
-            <h6>
-                <i class="fa fa-clock-o  pt-3" aria-hidden="true"></i>
-                &nbsp <%= movie.time %> 
+        <div class="col-xxl-6 col-md-5">
+            <div class="d-flex">
+                <a href="javascript:history.back()"><i class="far fa-chevron-left fw-bold pe-2 pt-2 h1 back-link" aria-hidden="true"></i></a>
+                <h1 class="fw-bold"><%= movie.name %></h1>
+            </div>
+            <h6 class="pt-4 ps-md-5 ps-xs-0"">
+                <i class="fa fa-clock-o pe-3" aria-hidden="true"></i>
+                <%= movie.time %> 
             </h6>
-            <h6>
-                <i class="fa fa-tags  pt-1" aria-hidden="true"></i>
-                &nbsp <%= movie.type %> 
+            <h6 class="pt-2 ps-md-5 ps-xs-0">
+                <i class="fa fa-tags pe-3" aria-hidden="true"></i>
+                <%= movie.type %> 
             </h6>
-            <h6>
-                <i class="fa fa-calendar-o  pt-1" aria-hidden="true"></i>
-                &nbsp <%= movie.date %> 
+            <h6 class="pt-2 ps-md-5 ps-xs-0">
+                <i class="fa fa-calendar-o pe-3" aria-hidden="true"></i>
+                <%= movie.date %> 
             </h6>
-            <h6>
+            <h6 class="pt-2 ps-md-5 ps-xs-0"">
+                <i class="fas fa-star pe-3" aria-hidden="true"></i>
+                <% if(movie.rating == ''){ %>
+                    N/A                                                    
+                <% }else{ let i = 0; %>
+                    <% movie.rating.forEach(function(rate){ %>
+                        <% i += rate %>
+                    <% }); %>
+                    <%= (i/movie.rating.length).toFixed(1) %>
+                <% } %> 
+            </h6>
+            <h6 class="pt-2 ps-md-5 ps-xs-0"">
                 <%= movie.desc %>
             </h6>
         </div>
-        <div class="col-xxl-3 col-md-1"></div>
+        <div class="col-xxl-3 col-md-3"></div>
         <div class="col-xxl-3 col-md-4">
-            <img class="w-100 shadow" src="<%= movie.poster %>">
+            <img class="w-100 pt-2 pb-2 shadow" src="<%= movie.poster %>">
         </div>
     </div>
     <hr class="text-dark mt-5">
