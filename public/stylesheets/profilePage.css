@@ -1,0 +1,62 @@
+.container-profile {
+    margin-top: 30px;
+    background-color: #1C1C21;
+}
+.container-profile-inner {
+    padding: 80px 15% 80px 15%;
+}
+.profile-pic {
+    height: 100%;
+}
+.edit-button{
+    background: #ffffff00;
+    border: #ffffff00;
+}
+.label-edit{
+    position: absolute;
+    z-index: 0;
+    display: inline;
+    width: 100%;
+    background: #e64c4cd0;
+    cursor: pointer;
+    margin: 0;
+    color: #fff;
+    padding: 50px;
+    font-size:18px;
+    bottom: -130px;
+    transition: all 0.2s ease-in-out;
+}
+.img-edit{
+    height: 380px;
+    object-fit: cover;
+    overflow: hidden;
+    text-align: center;
+}
+.profile-pic-edit{
+    height: 100%;
+}
+.img-edit:hover .label-edit{
+    bottom: 0px;
+}
+.label-edit:hover{    
+    background: #ffa885d3;
+}
+#upload-box{
+    display: inline-block;    
+    position: absolute;
+    cursor: pointer;    
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    opacity: 0;
+}
+.btn-submit{
+    background-color: #e64c4c !important;
+    color: white !important;
+}
+.btn-submit:hover{
+    background-color: #ffa885 !important;
+    color: white !important;
+}

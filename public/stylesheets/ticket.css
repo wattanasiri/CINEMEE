@@ -1,0 +1,109 @@
+.ticketWrap {
+    width: 27em;
+    color: #fff;
+    font-family: sans-serif;
+}
+.ticket {
+    background: linear-gradient(to bottom, #E64C4C 0%, #FFA785 22%, #ecedef 22%, #ecedef 100%);
+    height: 18em;
+    float: left;
+    padding: 1em;
+}
+.ticketLeft {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    width: 70%;
+}
+.ticketRight {
+    width: 30%;
+    border-left: 0.2em dashed #fff;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+h1 span {
+    font-weight: normal;
+}
+.movie, .seat, .time {
+    text-transform: uppercase;
+    font-weight: normal;
+}
+.movie h2, .name h2, .seat h2, .time h2 {
+    font-size: 1.2em;
+    color: #414141;
+    margin: 0;
+}
+.movie span, .name span, .seat span, .time span {
+    font-size: 0.9em;
+    color: #929292;
+}
+.movie {
+    margin: 2em 0 0 0;
+}
+.name, .seat {
+    margin: 0.7em 0 0 0;
+}
+.time {
+    margin: 0.7em 0 0 1em;
+}
+.seat, .time {
+    float: left;
+}
+.eye {
+    position: relative;
+    width: 2em;
+    height: 1.5em;
+    background: #fff;
+    margin: 0 auto;
+    border-radius: 1em/0.6em;
+    z-index: 1;
+}
+.eye:before, .eye:after {
+    content: "";
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+}
+.eye:before {
+    width: 1em;
+    height: 1em;
+    background: #E64C4C;
+    z-index: 2;
+    left: 8px;
+    top: 4px;
+}
+.eye:after {
+    width: 0.5em;
+    height: 0.5em;
+    background: #fff;
+    z-index: 3;
+    left: 12px;
+    top: 8px;
+}
+.number {
+    text-align: center;
+    text-transform: uppercase;
+}
+.number h3 {
+    color: #E64C4C;
+    margin: 0.8em 0 0 0;
+    font-size: 2.5em;
+}
+.number span {
+    display: block;
+    color: #929292;
+}
+.QrCode {
+    height: 5em;
+    width: 5em;
+}
+.checkout{
+    border: 0;
+    background-color: #E64C4C;
+    transition: all 0.2s;
+    font-size: 22px;
+}
+.checkout:hover{
+    background-color: #FFA785;
+    font-weight: bold;
+    font-size: 26px;
+}

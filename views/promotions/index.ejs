@@ -1,0 +1,15 @@
+<%- include('../partials/header.ejs') %>
+
+<% promotion.forEach(function(promotion){ %>
+<div class="container pt-5">
+    <p class="h2 text-light pt-5"><%= promotion.title %></p>
+    <hr class="text-light">
+</div>
+<img src="<%= promotion.image %>" height="500px" width="100%"">
+<div class="container pt-3">
+    <p class="h4 text-light"><%= promotion.desc %></p>
+</div>
+<hr class="text-light my-5">
+<% }); %>
+
+<%- include('../partials/footer.ejs') %>

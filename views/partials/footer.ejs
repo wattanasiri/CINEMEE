@@ -1,0 +1,95 @@
+</body>
+<footer class="text-center text-lg-start" style="background-color: rgba(0, 0, 0, 0.486);">
+    <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+      <div class="ms-4 mt-2 d-none d-lg-block footer-link">
+        <span>Get connected with us on social networks:</span>
+      </div>
+      <div>
+        <a href="https://www.facebook.com/bright.smart.zaza/" target="_blank" class="me-2 text-reset btn">
+            <i class="fab fa-facebook fa-lg footer-link" aria-hidden="true"></i>
+        </a>
+        <a href="https://www.instagram.com/bwtnsri_/" target="_blank" class="me-2 text-reset btn">
+            <i class="fab fa-instagram fa-lg footer-link" aria-hidden="true"></i>
+        </a>
+        <a href="https://www.google.com/" target="_blank" class="me-2 text-reset btn">
+          <i class="fab fa-google fa-lg footer-link" aria-hidden="true"></i>
+      </a>
+        <a href="mailto:wattanasiri.449@mail.ac.th" target="_blank" class="me-2 text-reset btn">
+            <i class="fal fa-envelope fa-lg footer-link" aria-hidden="true"></i>
+        </a>
+        <a href="https://github.com/wattanasiri" target="_blank" class="me-4 text-reset btn">
+            <i class="fab fa-github fa-lg footer-link" aria-hidden="true"></i>
+        </a>
+      </div>
+    </section>
+    <section>
+      <div class="container text-center text-md-start mt-5">
+        <div class="row mt-3">
+          <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+              <a href="/" class="text-decoration-none text-reset">
+                <img src="/img/CINEMEE-logo-red(only).png" class="mb-4 w-100">
+            </a>
+            <p class="footer-nav">This website is a project of the CSS 227 course at King Mongkut's University of Technology Thonburi.</p>
+          </div>
+          <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+            <h5 class="footer-head">
+                <a href="/movie" class="footer-head">Movies</a>
+            </h5>
+            <p>
+              <a href="/movie/now" class="footer-nav">Now Showing</a>
+            </p>
+            <p>
+              <a href="/movie/pop" class="footer-nav">Popular Now</a>
+            </p>
+            <p>
+              <a href="/movie/soon" class="footer-nav">Coming Soon</a>
+            </p>
+            <p>
+              <a href="/cinema" class="footer-nav">Cinemas</a>
+            </p>
+          </div>
+          <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+            <% if(!currentUser){ %>
+            <h5 class="footer-head">
+                <a href="/login" class="footer-head">Accounts</a>
+            </h5>
+            <p>
+              <a href="/login" class="footer-nav">My Profile</a>
+            </p>
+            <p>
+              <a href="/login" class="footer-nav">Like List</a>
+            </p>
+            <p>
+              <a href="/login" class="footer-nav">History</a>
+            </p>
+            <% }else{ %>
+            <h5 class="text-uppercase fw-bold mb-4">
+                <a href="/profile/<%= currentUser._id %>" class="footer-head">Accounts</a>
+            </h5>
+            <p>
+                <a href="/profile/<%= currentUser._id %>" class="footer-nav">My Profile</a>
+            </p>
+            <p>
+                <a href="/profile" class="footer-nav">Like List</a>
+            </p>
+            <p>
+                <a href="/profile" class="footer-nav">History</a>
+            </p>
+            <% } %>
+          </div>
+          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+            <h5 class="footer-head">
+              Contact
+            </h5>
+            <p class="footer-nav"><i class="fa fa-home me-3 fa-lg" aria-hidden="true"></i> Bangkok, 10160, TH</p>
+            <p class="footer-nav"><i class="fa fa-envelope me-3 fa-lg"></i>wattanasiri.449@mail.kmutt.ac.th</p>
+            <p class="footer-nav"><i class="fa fa-phone me-4 fa-lg"></i>0970405681</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="text-center p-4 footer-link" style="background-color: rgb(0, 0, 0);">
+      © 2021 Copyright: CINEMEE
+    </div>
+  </footer>
+</html>

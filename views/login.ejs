@@ -1,0 +1,76 @@
+<%- include('partials/header.ejs') %>
+
+<div class="container">
+    <div class="row pt-5 px-5">
+        <div class="col-xl-6">
+            <img src="/img/popcorn.png" class="w-100 img-login">
+        </div>
+        <div class="col-xl-1"></div>
+        <div class="wrapper col-xl-5 px-5 shadow">
+            <div class="title-text">
+               <div class="title login">
+                  Login
+               </div>
+               <div class="title signup">
+                  Register
+               </div>
+            </div>
+            <div class="form-container">
+               <div class="slide-controls">
+                  <input type="radio" name="slide" id="login" checked>
+                  <input type="radio" name="slide" id="signup">
+                  <label for="login" class="slide login">Login</label>
+                  <label for="signup" class="slide signup">Register</label>
+                  <div class="slider-tab"></div>
+               </div>
+               <div class="form-inner">
+                  <form action="/login" method="POST" class="login">
+                     <div class="field">
+                        <input type="text" placeholder="Username" name="username" required>
+                     </div>
+                     <div class="field">
+                        <input type="password" placeholder="Password" name="password" required>
+                     </div>
+                     <div class="field btn">
+                        <div class="btn-layer"></div>
+                        <input type="submit" value="Login">
+                     </div>
+                     <div class="signup-link">
+                        Not a member? <a href="">Register now</a>
+                     </div>
+                  </form>
+                  <form action="/register" method="POST" class="signup">
+                     <div class="row">
+                        <div class="col-6">
+                           <div class="field">
+                              <input type="text" placeholder="First name" name="firstname" required>
+                           </div>
+                        </div>
+                        <div class="col-6">
+                           <div class="field">
+                              <input type="text" placeholder="Last name" name="lastname" required>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="field">
+                        <input type="text" placeholder="Username" name="username" required>
+                     </div>
+                     <div class="field">
+                        <input type="email" placeholder="Email" name="email" required>
+                     </div>
+                     <div class="field">
+                        <input type="password" placeholder="Password" name="password" required>
+                     </div>
+                     <div class="field btn">
+                        <div class="btn-layer"></div>
+                        <input type="submit" value="Register">
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+    </div>
+    <div class="my-5 py-5"></div>
+</div>     
+
+<%- include('partials/footer.ejs') %>

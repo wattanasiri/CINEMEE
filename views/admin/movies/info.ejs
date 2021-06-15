@@ -1,0 +1,68 @@
+<%- include('../../partials/headerAdmin.ejs') %>
+
+<div class="mx-md-5 px-md-5 shadow py-5">
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-xxl-4 col-md-5 ">
+            <h1 class=" fw-bold"><a href="/admin/movie"><i class="far fa-chevron-left fw-bold pe-2 back-link" aria-hidden="true"></i></a><%= movie.name %></h1>
+            <h6>
+                <i class="fa fa-clock-o  pt-3" aria-hidden="true"></i>
+                &nbsp <%= movie.time %> 
+            </h6>
+            <h6>
+                <i class="fa fa-tags  pt-1" aria-hidden="true"></i>
+                &nbsp <%= movie.type %> 
+            </h6>
+            <h6>
+                <i class="fa fa-calendar-o  pt-1" aria-hidden="true"></i>
+                &nbsp <%= movie.date %> 
+            </h6>
+            <h6>
+                <%= movie.desc %>
+            </h6>
+        </div>
+        <div class="col-xxl-3 col-md-1"></div>
+        <div class="col-xxl-3 col-md-4">
+            <img class="w-100 shadow" src="<%= movie.poster %>">
+        </div>
+    </div>
+    <hr class="text-dark mt-5">
+    <h2 class="pb-2 pt-3 fw-bold">Trailer<i class="ms-3 fa fa-film " aria-hidden="true"></i></h2>
+    <div class="ratio ratio-16x9">              
+        <iframe src="<%= movie.trailer %>" title="YouTube video" allowfullscreen></iframe>
+    </div>
+    <hr class="text-dark mt-5">
+    <h2 class="fw-bold pb-3">Reviews<i class="ms-3 fa fa-star" aria-hidden="true"></i></h2>    
+    <% if(movie.reviews == ""){ %>
+    <div class="text-secondary pt-5 d-flex justify-content-center" style="height: 200px;">
+        <h5><i class="fa fa-comments-o fa-2x" aria-hidden="true"></i>&nbsp Don't have any reviews.</h5>
+    </div>
+    <% }else{ %>
+        <% movie.reviews.forEach(function(review){ %>    
+        <div class="pb-4 px-5">
+            <div class="shadow-lg row rounded p-4">
+                <div class="col-11">
+                    <div>
+                        <% if(review.rating == ''){}else{ %>
+                            <% for(i=1; i <= review.rating; i++){ %>
+                            <i class="fas fa-star text-warning"></i>
+                            <% } %>
+                        <% } %>
+                    </div>   
+                    <strong class="h5 fw-bold"><%= review.author.username %>&nbsp:&nbsp</strong>
+                    <div class="border-0 card bg-transparent d-block"><%= review.text %></div>
+                </div>
+                <div class="btn-group col-1 d-flex justify-content-end">
+                    <form action="/admin/movie/<%= movie._id %>/removeReview/<%= review._id %>?_method=DELETE" method="POST" onsubmit="if(!confirm('Confirm this action?')){return false;}">
+                        <button class="dropdown-item bg-transparent border-0" href="/movie/<%= movie._id %>/review/<%= review._id %>/edit"><i class="fal fa-trash fa-2x me-2 mt-3 text-danger"></i></button>                              
+                    </form>
+                </div>
+            </div>
+        </div>
+        <% }); %>
+    <% }; %>
+    <div class="py-5"></div>
+</div>
+    
+
+<%- include('../../partials/footerAdmin.ejs') %>

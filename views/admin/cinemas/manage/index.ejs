@@ -1,0 +1,145 @@
+<%- include('../../../partials/headerAdmin.ejs') %>
+
+<script>
+    function searchTheater() {
+      // Declare variables
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("search-input-theater");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("table-theater");
+      tr = table.getElementsByTagName("tr");
+    
+      // Loop through all table rows, and hide those who don't match the search query
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+    function edit(id) {
+        document.getElementById(id).style.display = 'none';
+        document.getElementById('edit'+id).style.display = 'block';
+    }
+    function cancel(id) {
+        document.getElementById(id).style.display = 'block';
+        document.getElementById('edit'+id).style.display = 'none';
+    }
+</script>
+
+<div class="py-5">
+    <div class="d-flex justify-content-between">
+        <div class="d-md-flex">
+            <h2 class="fw-bold">
+                <a href="/admin/cinema" class="back-link">
+                    <i class="far fa-chevron-left fw-bold pe-2" aria-hidden="true"></i>
+                </a>
+                <%= cinema.branch %>            
+            </h2>
+            <div class="ps-3">
+                <form action="/admin/cinema/<%= cinema._id %>/manage/theater/" method="POST">
+                    <button href="/admin/cinema/new" class="btn btn-primary">
+                        <i class="fal fa-plus" aria-hidden="true"></i>&nbspAdd theater
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="d-flex">
+            <input type="number" class="form-control" id="search-input-theater" min="1" oninput="this.value = !!this.value && Math.abs(this.value) > 0 ? Math.abs(this.value) : null"
+             onchange="searchTheater()" onkeyup="searchTheater()" placeholder="Search for Theater no.">
+        </div>
+    </div>
+    <hr>
+    <table class="table" id="table-theater">
+        <thead class="h3">
+            <tr class="align-top text-center">
+                <th scope="col">Theater no.</th>
+                <th scope="col">Number of row</th>
+                <th scope="col">Number of seat (Per row)</th>
+                <th scope="col">All showtime</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="h5"> 
+        <% cinema.theater.forEach(function(theater){ %>
+            <tr class="align-middle">
+                <td scope="col" class="text-center fw-bold">
+                    <div id="<%= theater.theaterNo %><%= theater._id %>" style="cursor: pointer;" title="edit" onclick="edit('<%= theater.theaterNo %><%= theater._id %>')">                        
+                        <%= theater.theaterNo %>
+                    </div>
+                    <div id="edit<%= theater.theaterNo %><%= theater._id %>" class="text-center" style="display: none;">
+                        <div class="d-flex justify-content-center">
+                            <form action="/admin/cinema/<%= cinema._id %>/manage/theater/<%= theater._id %>?_method=PUT" method="POST">
+                                <input class="from-control" type="number" name="theater[theaterNo]" placeholder="<%= theater.theaterNo %>" 
+                                value="<%= theater.theaterNo %>" min="1" oninput="this.value = !!this.value && Math.abs(this.value) > 0 ? Math.abs(this.value) : null" style="width: 60px;" />
+                                <button class="bg-transparent border-0" type="submit"><i class="fw-bold text-success fal fa-check"></i></button>
+                            </form>
+                            <button class="bg-transparent border-0" onclick="cancel('<%= theater.theaterNo %><%= theater._id %>')"><i class="fw-bold text-danger fal fa-times"></i></button>
+                        </div>
+                    </div>
+                </td>
+                <td scope="col" class="text-center">
+                    <div id="<%= theater._id %>row" style="cursor: pointer;" title="edit" onclick="edit('<%= theater._id %>row')">
+                        <%= theater.numberOfRow %>
+                    </div>
+                    <div id="edit<%= theater._id %>row" class="text-center"  style="display: none;">
+                        <div class="d-flex justify-content-center">
+                            <form action="/admin/cinema/<%= cinema._id %>/manage/theater/<%= theater._id %>?_method=PUT" method="POST">
+                                <input class="from-control" type="number" name="theater[numberOfRow]" placeholder="<%= theater.numberOfRow %>" 
+                                value="<%= theater.numberOfRow %>" min="1" max="15" oninput="this.value = !!this.value && Math.abs(this.value) > 0 ? Math.abs(this.value) : null" style="width: 60px;"/>
+                                <button class="bg-transparent border-0" type="submit"><i class="fw-bold text-success fal fa-check"></i></button>
+                            </form>
+                            <button class="bg-transparent border-0" onclick="cancel('<%= theater._id %>row')"><i class="fw-bold text-danger fal fa-times"></i></button>
+                        </div>
+                    </div>
+                </td>
+                <td scope="col" class="text-center">
+                    <div id="<%= theater._id %>col" style="cursor: pointer;" title="edit" onclick="edit('<%= theater._id %>col')">
+                        <%= theater.numberOfColumn %>
+                    </div>
+                    <div id="edit<%= theater._id %>col" class="text-center"  style="display: none;">
+                        <div class="d-flex justify-content-center">
+                            <form action="/admin/cinema/<%= cinema._id %>/manage/theater/<%= theater._id %>?_method=PUT" method="POST">
+                                <input class="from-control" type="number" name="theater[numberOfColumn]" placeholder="<%= theater.numberOfColumn %>" 
+                                value="<%= theater.numberOfColumn %>" min="6" max="20" oninput="this.value = !!this.value && Math.abs(this.value) > 0 ? Math.abs(this.value) : null" style="width: 60px;"/>
+                                <button class="bg-transparent border-0" type="submit"><i class="fw-bold text-success fal fa-check"></i></button>
+                            </form>
+                            <button class="bg-transparent border-0" onclick="cancel('<%= theater._id %>col')"><i class="fw-bold text-danger fal fa-times"></i></button>
+                        </div>
+                    </div>
+                </td>
+                <td scope="col" class="text-center">
+                    <% for(j=0; j < theater.showtime.length; j++) %>
+                    <%= j %>
+                </td>
+                <td scope="col" class="text-center">
+                    <button class="border-0 bg-transparent dropdown-toggle" type="button" id="defaultDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false"><i class="fad fa-cogs fa-2x"></i></button>
+                    <ul class="dropdown-menu" aria-labelledby="defaultDropdown">
+                        <% if(theater.numberOfRow == 0){ %>
+                        <% }else if(theater.numberOfColumn == 0){ %>
+                        <% }else{ %>                        
+                        <li style="position: relative;">
+                            <form action="/admin/cinema/<%= cinema._id %>/manage/theater/<%= theater._id %>/showtime" method="GET">
+                                <button class="border-0 bg-transparent py-2 px-3 stretched-link"><i class="fal fa-layer-group me-2"></i>Add showtime</button>
+                            </form>
+                        </li>  
+                        <% } %>                                     
+                        <li style="position: relative;">
+                            <form action="/admin/cinema/<%= cinema._id %>/manage/theater/<%= theater._id %>?_method=DELETE" method="POST" onsubmit="if(!confirm('Confirm this action?')){return false;}">
+                                <button class="border-0 bg-transparent py-2 px-3 stretched-link"><i class="fal fa-trash me-2"></i>Delete</button>
+                            </form>
+                        </li>
+                    </ul>     
+                </td>
+            </tr>
+        <% }); %>
+        </tbody>
+  </table>
+</div>
+
+<%- include('../../../partials/footerAdmin.ejs') %>

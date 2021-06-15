@@ -1,0 +1,113 @@
+<%- include('../partials/header.ejs') %>
+
+<div class="album py-5 px-5">
+    <div class="container pt-2">
+        <div class="d-flex">
+            <h1 class="text-light fw-bold">
+                <a href="/cinema"><i class="far fa-chevron-left fw-bold pe-2 back-link" aria-hidden="true"></i></a>
+                <%= cinema.branch %>
+            </h1>        
+            <% if(!currentUser){ %>
+            <form action="/cinema/<%= cinema._id %>/addFavorite" method="POST" class="pt-2 ps-4">
+                <input value="<%= cinema._id %>" name="cinema" class="visually-hidden">
+                <button title="Add to favorite" class="bg-transparent border-0"><i class="fa fa-heart-o fa-2x text-light"></i></button>
+            </form>
+            <% }else{ let j = 0; %> 
+                <% currentUser.favoriteCinema.forEach(function(favCinema){ %>
+                <% if(favCinema.equals(cinema._id)){ j++; }%>
+                <% }); %>
+                <% if(j > 0){ %>
+                    <form action="/cinema/<%= cinema._id %>/removeFavorite" method="POST" class="pt-2 ps-4">
+                        <input value="<%= cinema._id %>" name="cinema" class="visually-hidden">
+                        <button title="Add to favorite" class="bg-transparent border-0"><i class="fa fa-heart-o fa-2x text-danger"></i></button>
+                    </form>
+                <% }else{ %>
+                    <form action="/cinema/<%= cinema._id %>/addFavorite" method="POST" class="pt-2 ps-4">
+                        <input value="<%= cinema._id %>" name="cinema" class="visually-hidden">
+                        <button title="Add to favorite" class="bg-transparent border-0"><i class="fa fa-heart-o fa-2x text-light"></i></button>
+                    </form>
+                <% } %>
+            <% } %>
+        </div>
+        <hr class="text-light">
+        <div class="text-light px-md-5 px-xs-0">            
+            <% cinema.theater.forEach(function(theater){ %>
+                <% var checkTheater = 0; %>
+                <% cinema.movies.forEach(function(movie){ %>
+                    <% if(theater.showtime == ''){ %>
+                    <% } else { %>
+                        <% var checkPoster = 0; %>
+                        <% theater.showtime.forEach(function(showtime){ %>
+                            <% if(checkTheater == 0){ checkTheater++ %>
+                            <h3 class="fw-bold pt-5">Theater <%= theater.theaterNo %><hr></h3>
+                            <% } %>    
+                            <% if(showtime.movie.equals(movie)){  %>                            
+                                <% if(checkPoster == 0){ checkPoster++ %>
+                                <div class="showtime-card rounded-3">    
+                                    <div class="row mb-3 shadow"> 
+                                        <div class="col-xl-3 col-md-6">                        
+                                            <img src="<%= movie.poster %>" class="w-100">
+                                        </div>
+                                        <div class="col-xl-8 col-md-4">
+                                            <h4 class="fw-bold pt-3 pb-2"><%= movie.name %></h4>
+                                            <div class="d-flex">
+                                                <h6><i class="fal fa-clock pe-2"></i><%= movie.time %>,</h6>
+                                                <h6 class="ps-3"><i class="fal fa-tag pe-2"></i><%= movie.type %>,</h6>
+                                                <h6 class="ps-3"><i class="fal fa-loveseat pe-2"></i>Number of seat <%= (theater.numberOfRow*theater.numberOfColumn) %></h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-1 col-md-2 pt-3">
+                                            <% if(movie.reviews.length == 0){ %>
+                                                N/A                                                    
+                                            <% }else{ let i = 0; %>
+                                                <% movie.reviews.forEach(function(review){ %>
+                                                    <% i += review.rating %>
+                                                <% }); %>
+                                                <%= (i/movie.reviews.length).toFixed(1) %>
+                                            <% } %>
+                                            <i class="fas fa-star fa-lg"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% var today = new Date %>
+                                <% var timeNow = today.getHours() + ":" + today.getMinutes(); %>
+                                    <% if(showtime.time < timeNow){ %>
+                                    <div class="d-inline-block px-md-2">
+                                        <form action="/cinema/<%= cinema._id %>/showtime/<%= showtime._id %>" method="GET">
+                                            <button class="showtime-button" disabled><%= showtime.time %></button>
+                                        </form>
+                                    </div>  
+                                    <% } else{ %>
+                                        <div class="d-inline-block px-md-2">
+                                            <form action="/cinema/<%= cinema._id %>/showtime/<%= showtime._id %>" method="GET">
+                                                <button class="showtime-button"><%= showtime.time %></button>
+                                            </form>
+                                        </div> 
+                                    <% } %>
+                                <% }else{ %>
+                                    <% var today = new Date %>
+                                    <% var timeNow = today.getHours() + ":" + today.getMinutes(); %>
+                                    <% if(showtime.time < timeNow){ %>
+                                        <div class="d-inline-block px-md-2">
+                                            <form action="/cinema/<%= cinema._id %>/showtime/<%= showtime._id %>" method="GET">
+                                                <button class="showtime-button" disabled><%= showtime.time %></button>
+                                            </form>
+                                        </div>  
+                                        <% } else{ %>
+                                            <div class="d-inline-block px-md-2">
+                                                <form action="/cinema/<%= cinema._id %>/showtime/<%= showtime._id %>" method="GET">
+                                                    <button class="showtime-button"><%= showtime.time %></button>
+                                                </form>
+                                            </div> 
+                                        <% } %>
+                                <% } %>
+                            <% } %>
+                        <% }); %>
+                    <% } %>
+                <% }) %>
+            <% }); %>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer.ejs') %>

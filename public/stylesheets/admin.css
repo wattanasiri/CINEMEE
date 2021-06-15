@@ -1,0 +1,88 @@
+.container-profile {
+    margin-top: 30px;
+}
+.container-profile-inner {
+    padding: 80px 10% 80px 10%;
+}
+.profile-pic {
+    height: 100%;
+}
+.edit-button{
+    background: #ffffff00;
+    border: #ffffff00;
+}
+.img-edit:hover .label-edit{
+    bottom: 0;
+    cursor: pointer;
+    display: block;
+}
+#upload-box{   
+    cursor: pointer; 
+    width: 100px;
+}
+.btn-submit{
+    background-color: #e64c4c !important;
+    color: white !important;
+}
+.btn-submit:hover{
+    background-color: #ffa885 !important;
+    color: white !important;
+}
+.back-link{
+    text-decoration: none;
+    color: #E64C4C;
+    transition: all 0.2s ease-in-out;
+}
+.back-link:hover{
+    color: #FFA785;
+}
+.img-poster{
+    height: 350px;
+}
+.img-poster-edit{
+    height: 250px;
+}
+.btn-primary{
+    margin-left: 10px;
+    padding: 10px;
+    border: transparent;
+    background-color: #E64C4C;
+}
+.btn-primary:hover{
+    background-color: #FFA785;
+}
+.btn-secondary{
+    margin-left: 10px;
+    padding: 10px;
+    border: transparent;
+    background-color: #4A4645;
+}
+.btn-secondary:hover{
+    background-color: #A5A3A2;   
+}
+.form-check-input{
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    border: 0;
+    background-color: #FFA785;
+}
+.form-check-input:focus, .form-check-input:checked{
+    background-color: #E64C4C;
+}
+.form-check-input:hover{
+    background-color: #E64C4C;
+}
+.modal-header{
+    background-color: #E64C4C;
+    color: white;
+}
+
+@media only screen and (max-width: 993px){
+    .img-poster{
+        height: 150px;
+    }
+    .img-poster-edit{
+        height: 120px;
+    }
+}

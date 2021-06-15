@@ -1,0 +1,225 @@
+<%- include('../../partials/headerAdmin.ejs') %>
+<script>
+    function searchAdmin() {
+      // Declare variables
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("search-input-admin");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("table-admin");
+      tr = table.getElementsByTagName("tr");
+    
+      // Loop through all table rows, and hide those who don't match the search query
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[1];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+
+    function searchUser() {
+      // Declare variables
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("search-input-user");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("table-user");
+      tr = table.getElementsByTagName("tr");
+    
+      // Loop through all table rows, and hide those who don't match the search query
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[1];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+</script>
+<div class="py-5">
+    <div class="d-flex justify-content-between">
+        <h2 class="fw-bold">Admin</h2>
+        <div>
+            <input type="text" class="form-control" id="search-input-admin" onkeyup="searchAdmin()" placeholder="Search for username">
+        </div>
+    </div>
+    <hr>
+    <table class="table" id="table-admin" style="word-wrap: break-word; table-layout: fixed;">
+        <thead class="h3">
+            <tr class="align-top">
+              <th scope="col" class="text-center" style="width: 10%;">Picture</th>
+              <th scope="col" style="width: 25%;">Username</th>
+              <th scope="col" style="width: 55%;">Email</th>
+              <th scope="col" class="text-center" style="width: 10%;">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="h5">
+        <% user.forEach(function(user){ %>
+            <% if(user.isAdmin && !(currentUser._id.equals(user._id))){ %>
+            <div class="modal fade" id="exampleModal<%= user._id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title fw-bold" id="exampleModalLabel"><i class="fal fa-info-circle fa-lg pe-1"></i>Info</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: white !important;"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-3">
+                                    <img src="<%= user.image %>" height="100px" width="100px" class="me-2 rounded-circle">
+                                </div>
+                                <div class="col-9">
+                                    <h5><span class="fw-bold">First name : </span><%= user.firstname %></h5>
+                                    <h5><span class="fw-bold">Last name : </span><%= user.lastname %></h5>
+                                    <h5><span class="fw-bold">Username : </span><%= user.username %></h5>
+                                    <h5><span class="fw-bold">Email : </span><%= user.email %></h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <tr class="align-middle">
+                <td scope="col" class="text-center"><img src="<%= user.image %>" height="40px" width="40px" class="me-2 rounded-circle"></td>
+                <td scope="col"><%= user.username %></td>
+                <td scope="col"><%= user.email %></td>
+                <td scope="col" class="text-center">
+                    <button class="border-0 bg-transparent dropdown-toggle" type="button" id="defaultDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false"><i class="fad fa-cogs fa-2x"></i></button>
+                    <ul class="dropdown-menu" aria-labelledby="defaultDropdown">
+                        <% if(currentUser.isHeaderAdmin){ %>
+                        <li style="position: relative;">
+                            <button class="border-0 bg-transparent py-2 px-3 stretched-link" data-bs-toggle="modal" data-bs-target="#exampleModal<%= user._id %>"><i class="far fa-info-circle me-2"></i>Info</button>
+                        </li>
+                        <li style="position: relative;">
+                            <form action="/admin/user/deleteAdmin/<%= user._id %>" method="POST" onsubmit="if(!confirm('Confirm this action?')){return false;}">
+                                <button class="border-0 bg-transparent py-2 px-3 stretched-link"><i class="fad fa-user-minus me-2"></i>Admin</button>
+                            </form>
+                        </li>
+                        <li style="position: relative;">
+                            <form action="/admin/user/deleteAccount/<%= user._id %>?_method=DELETE" method="POST" onsubmit="if(!confirm('Confirm this action?')){return false;}">
+                                <button class="border-0 bg-transparent py-2 px-3 stretched-link"><i class="fad fa-user-slash me-2"></i>Delete account</button>
+                            </form>
+                        </li style="position: relative;">
+                        <% }else{ %>
+                        <li style="position: relative;">
+                            <form action="/admin/user/getInfo/<%= user._id %>" method="GET">
+                                <button class="border-0 bg-transparent py-2 px-3 stretched-link" data-bs-toggle="modal" data-bs-target="#exampleModal<%= user._id %>"><i class="far fa-info-circle me-2"></i>Info</button>
+                            </form>
+                        </li>
+                        <% } %>
+                    </ul>     
+                </td>
+            </tr>
+            <% }else{} %>
+            <div class="modal" tabindex="-1">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Modal title</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Modal body text goes here.</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        <% }); %>
+        </tbody>
+    </table>
+</div>
+<div class="py-5">
+    <div class="d-flex justify-content-between">
+        <h2 class="fw-bold">User</h2>
+        <div>
+            <input type="text" class="form-control" id="search-input-user" onkeyup="searchUser()" placeholder="Search for username">
+        </div>
+    </div>
+    <hr>
+    <table class="table" id="table-user" style="word-wrap:break-word; table-layout:fixed;">
+        <thead class="h3">
+            <tr class="align-top">
+                <th scope="col" class="text-center" style="width: 10%;">Picture</th>
+                <th scope="col" style="width: 25%;">Username</th>
+                <th scope="col" style="width: 55%;">Email</th>
+                <th scope="col" class="text-center" style="width: 10%;">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="h5">
+        <% user.forEach(function(user){ %>
+            <% if(!user.isAdmin){ %>
+            <tr class="align-middle">
+                <div class="modal fade" id="exampleModal<%= user._id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title fw-bold" id="exampleModalLabel"><i class="fal fa-info-circle fa-lg pe-1"></i>Info</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: white !important;"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <img src="<%= user.image %>" height="100px" width="100px" class="me-2 rounded-circle">
+                                    </div>
+                                    <div class="col-9">
+                                        <h5><span class="fw-bold">First name : </span><%= user.firstname %></h5>
+                                        <h5><span class="fw-bold">Last name : </span><%= user.lastname %></h5>
+                                        <h5><span class="fw-bold">Username : </span><%= user.username %></h5>
+                                        <h5><span class="fw-bold">Email : </span><%= user.email %></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <td scope="col" class="text-center" ><img src="<%= user.image %>" height="40px" width="40px" class="me-2 rounded-circle"></td>
+                <td scope="col"><%= user.username %></td>
+                <td scope="col"><%= user.email %></td>
+                <td scope="col" class="text-center">
+                    <button class="border-0 bg-transparent dropdown-toggle" type="button" id="defaultDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false"><i class="fad fa-cogs fa-2x"></i></button>
+                    <ul class="dropdown-menu" aria-labelledby="defaultDropdown">
+                        <% if(currentUser.isHeaderAdmin){ %>
+                        <li style="position: relative;">
+                            <button class="border-0 bg-transparent py-2 px-3 stretched-link" data-bs-toggle="modal" data-bs-target="#exampleModal<%= user._id %>"><i class="far fa-info-circle me-2"></i>Info</button>
+                        </li>
+                        <li style="position: relative;">
+                            <form action="/admin/user/addAdmin/<%= user._id %>" method="POST" onsubmit="if(!confirm('Confirm this action?')){return false;}">
+                                <button class="border-0 bg-transparent py-2 px-3 stretched-link"><i class="fad fa-user-plus me-2"></i>Admin</button>
+                            </form>
+                        </li>
+                        <li style="position: relative;">
+                            <form action="/admin/user/deleteAccount/<%= user._id %>?_method=DELETE" method="POST" onsubmit="if(!confirm('Confirm this action?')){return false;}">
+                                <button class="border-0 bg-transparent py-2 px-3 stretched-link"><i class="fad fa-user-slash me-2"></i>Delete account</button>
+                            </form>
+                        </li>
+                        <% }else{ %>
+                        <li style="position: relative;">
+                            <button class="border-0 bg-transparent py-2 px-3 stretched-link" data-bs-toggle="modal" data-bs-target="#exampleModal<%= user._id %>"><i class="far fa-info-circle me-2"></i>Info</button>
+                        <li style="position: relative;">
+                            <form action="/admin/user/deleteAccount/<%= user._id %>?_method=DELETE" method="POST" onsubmit="if(!confirm('Confirm this action?')){return false;}">
+                                <button class="border-0 bg-transparent py-2 px-3 stretched-link"><i class="fad fa-user-slash me-2"></i>Delete account</button>
+                            </form>
+                        </li>
+                        <% } %>
+                    </ul>             
+                </td>
+            </tr>
+            <% }else{} %>
+        <% }); %>
+        </tbody>
+    </table>
+</div>
+
+<%- include('../../partials/footerAdmin.ejs') %>

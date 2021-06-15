@@ -1,0 +1,279 @@
+<div class="bg-moviePage" style="background-image: linear-gradient(to right,rgba(0, 0, 0, 1),rgba(0, 0, 0, 0.9),rgba(0, 0, 0, 0.5),rgba(0, 0, 0, 0.9),rgba(0,0,0,1)),url('<%= movie.poster %>');">
+<%- include('../partials/header.ejs') %>
+<script>
+    function editReview(id) {
+        document.getElementById(id).style.display = 'none';
+        document.getElementById('edit'+id).style.display = 'block';
+    }
+    function cancelEdit(id) {
+        document.getElementById(id).style.display = 'block';
+        document.getElementById('edit'+id).style.display = 'none';
+    }
+</script>
+<div class="container py-5">
+    <div class="row">
+        <div class="col-xxl-6 col-md-5 text-light">
+            <div class="d-flex">
+                <h1 class="text-light fw-bold"><a href="javascript:history.back()"><i class="far fa-chevron-left fw-bold pe-2 back-link" aria-hidden="true"></i></a><%= movie.name %></h1>
+                <% if(!currentUser){ %>
+                <form action="/movie/<%= movie._id %>/addFavorite" method="POST" class="pt-2 ps-4">
+                    <input value="<%= movie._id %>" name="movie" class="visually-hidden">
+                    <button title="Add to favorite" class="bg-transparent border-0"><i class="fa fa-heart-o fa-2x text-light"></i></button>
+                </form>
+                <% }else{ let j = 0; %> 
+                    <% currentUser.favoriteMovie.forEach(function(favMovie){ %>
+                    <% if(favMovie.equals(movie._id)){ j++; }%>
+                    <% }); %>
+                    <% if(j > 0){ %>
+                        <form action="/movie/<%= movie._id %>/removeFavorite" method="POST" class="pt-2 ps-4">
+                            <input value="<%= movie._id %>" name="movie" class="visually-hidden">
+                            <button title="Add to favorite" class="bg-transparent border-0"><i class="fa fa-heart-o fa-2x text-danger"></i></button>
+                        </form>
+                    <% }else{ %>
+                        <form action="/movie/<%= movie._id %>/addFavorite" method="POST" class="pt-2 ps-4">
+                            <input value="<%= movie._id %>" name="movie" class="visually-hidden">
+                            <button title="Add to favorite" class="bg-transparent border-0"><i class="fa fa-heart-o fa-2x text-light"></i></button>
+                        </form>
+                    <% } %>
+                <% } %>
+            </div>
+            <h6 class="pt-4 ps-md-5 ps-xs-0"">
+                <i class="fa fa-clock-o text-light pe-3" aria-hidden="true"></i>
+                <%= movie.time %> 
+            </h6>
+            <h6 class="pt-2 ps-md-5 ps-xs-0">
+                <i class="fa fa-tags text-light pe-3" aria-hidden="true"></i>
+                <%= movie.type %> 
+            </h6>
+            <h6 class="pt-2 ps-md-5 ps-xs-0">
+                <i class="fa fa-calendar-o text-light pe-3" aria-hidden="true"></i>
+                <%= movie.date %> 
+            </h6>
+            <h6 class="pt-2 ps-md-5 ps-xs-0"">
+                <i class="fas fa-star text-light pe-3" aria-hidden="true"></i>
+                <% if(movie.rating == ''){ %>
+                    N/A                                                    
+                <% }else{ let i = 0; %>
+                    <% movie.rating.forEach(function(rate){ %>
+                        <% i += rate %>
+                    <% }); %>
+                    <%= (i/movie.rating.length).toFixed(1) %>
+                <% } %> 
+            </h6>
+            <h6 class="pt-2 ps-md-5 ps-xs-0"">
+                <%= movie.desc %>
+            </h6>
+        </div>
+        <div class="col-xxl-3 col-md-3"></div>
+        <div class="col-xxl-3 col-md-4">
+            <img class="w-100 pt-2 pb-2 shadow" src="<%= movie.poster %>">
+        </div>
+    </div>
+    <hr class="text-light">
+    <h2 class="text-light pb-5 pt-3 fw-bold">Trailer<i class="ms-3 fa fa-film text-light" aria-hidden="true"></i></h2>
+    <div class="ratio ratio-16x9 mb-5">              
+        <iframe src="<%= movie.trailer %>" title="YouTube video" allowfullscreen></iframe>
+    </div>
+</div>
+</div>
+<div class="container-moviePage"> 
+    <div class="container-movie">
+        <h2 class="text-light pt-5 fw-bold">Cinema<i class="ms-3 far fa-camera-movie" aria-hidden="true"></i></h2>
+        <% if(cinema == ''){ %>
+        <div class="text-secondary pt-5 mt-5 d-flex justify-content-center" style="height: 100px;">
+            <h5 class="align-middle"><i class="fas fa-times fa-lg me-2" aria-hidden="true"></i>Don't have any showtime.</h5>
+        </div>
+        <% }else{ %>
+        <div class="row mb-5">
+        <% cinema.forEach(function(cinema){ %>           
+            <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-12 col-sm-12 pt-4">      
+                <div class="card-cinema border-0">
+                    <div class="wrapper-home">                    
+                        <div class="header-card-cinema">                      
+                            <ul class="menu-content ">
+                                <li>
+                                    <% if(!currentUser){ %>
+                                        <form action="/cinema/<%= cinema._id %>/addFavorite" method="POST">
+                                            <input value="<%= cinema._id %>" name="movie" class="visually-hidden">
+                                            <button title="Add to favorite"><i class="fa fa-heart-o fa-xl text-light"></i></button>
+                                        </form>
+                                    <% }else{ let j = 0; %> 
+                                        <% currentUser.favoriteCinema.forEach(function(favCinema){ %>
+                                        <% if(favCinema.equals(cinema._id)){ j++; }%>
+                                        <% }); %>
+                                        <% if(j > 0){ %>
+                                            <form action="/cinema/<%= cinema._id %>/removeFavorite" method="POST">
+                                                <input value="<%= cinema._id %>" name="movie" class="visually-hidden">
+                                                <button title="Add to favorite"><i class="fa fa-heart-o fa-xl text-danger"></i></button>
+                                            </form>
+                                        <% }else{ %>
+                                            <form action="/cinema/<%= cinema._id %>/addFavorite" method="POST">
+                                                <input value="<%= cinema._id %>" name="movie" class="visually-hidden">
+                                                <button title="Add to favorite"><i class="fa fa-heart-o fa-xl text-light"></i></button>
+                                            </form>
+                                        <% } %>
+                                    <% } %>
+                                </li>                                
+                            </ul>
+                        </div>                    
+                        <div class="data">                      
+                            <div class="content" style="transform: rotate(0);">                 
+                                <h4 class="movie-title" style="font-weight: 700;"><%= cinema.branch %></h4>
+                                <p class="text">
+                                <p><i class="far fa-camera-movie me-3" aria-hidden="true"></i>Movie available <%= cinema.movies.length %></p>
+                                <p><i class="far fa-popcorn me-3" aria-hidden="true"></i><%= cinema.theater.length %> Theater</p>
+                                </p>    
+                                <a href="/cinema/<%= cinema._id %>" class="stretched-link"></a>                    
+                            </div>
+                            <a href="/cinema/<%= cinema._id %>" class="button">Show more</a>
+                        </div>
+                    </div>
+                </div>          
+            </div>
+        <% }); %>
+        </div>
+        <% } %>
+        <h2 class="text-light fw-bold mt-5">Reviews<i class="ms-3 fa fa-star" aria-hidden="true"></i></h2>
+        <div class="pb-5">
+            <form action='/movie/<%= movie._id %>/review' method="POST">
+                <div class="row">                    
+                    <div class="col-xl-11 col-10">                        
+                        <div class="form-floating text-light">
+                            <input type="text" maxlength="200" class="form-control bg-transparent text-light border border-0 border-bottom" id="floatingInput" name="review[text]" required></input>
+                            <label for="floatingInput">Write review</label>
+                        </div>
+                        <fieldset class="rating">
+                            <input type="radio" id="star5" name="review[rating]" value="5" /><label id="label-rating" class = "full" for="star5" title="Awesome - 5 stars"></label>
+                            <input type="radio" id="star4" name="review[rating]" value="4" /><label id="label-rating" class = "full" for="star4" title="Pretty good - 4 stars"></label>
+                            <input type="radio" id="star3" name="review[rating]" value="3" /><label id="label-rating" class = "full" for="star3" title="Average - 3 stars"></label>
+                            <input type="radio" id="star2" name="review[rating]" value="2" /><label id="label-rating" class = "full" for="star2" title="Kinda bad - 2 stars"></label>
+                            <input type="radio" id="star1" name="review[rating]" value="1" /><label id="label-rating" class = "full" for="star1" title="Sucks big time - 1 star"></label>
+                        </fieldset>
+                    </div>
+                    <div class="col-xl-1 col-2 pt-3">
+                        <button class="btn" type="submit"><i class="fa fa-paper-plane text-light fa-lg pe-5" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div>
+            <% if(movie.reviews == ""){ %>
+            <div class="text-secondary pt-5 d-flex justify-content-center" style="height: 200px;">
+                <h5><i class="fa fa-comments-o fa-2x" aria-hidden="true"></i>&nbsp Don't have any reviews.</h5>
+            </div>
+            <% }else{ %>
+                <div class="review">
+                    <% movie.reviews.forEach(function(review){ %>
+                        <% if(currentUser && review.author.id.equals(currentUser._id)){ %>
+                        <div class="pb-4 review-box" id="<%= review._id %>">
+                            <div class="review-owner shadow-lg row">                                
+                                <div class="text-light col-11">  
+                                    <div>
+                                        <% if(review.rating == ''){}else{ %>
+                                            <% for(i=1; i <= review.rating; i++){ %>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <% } %>
+                                        <% } %>
+                                    </div>                                  
+                                    <strong class="h5 fw-bold"><%= review.author.username %> (Me)&nbsp:</strong>                                        
+                                    <div class="border-0 card bg-transparent d-block"><%= review.text %></div>                                    
+                                </div> 
+                                <div class="btn-group col-1 d-flex justify-content-end">
+                                    <button class="border-0 bg-transparent dropdown-toggle dropdown-toggle-review text-light" type="button" id="defaultDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false"><i class="far fa-ellipsis-v"></i></button>
+                                    <ul class="dropdown-menu bg-dark" aria-labelledby="defaultDropdown">
+                                        <li><a class="dropdown-item text-light" onclick="editReview('<%= review._id %>')"><i class="far fa-edit me-2"></i>Edit</a></li>
+                                        <li>
+                                            <form action="/movie/<%= movie._id %>/review/<%= review._id %>?_method=DELETE" method="POST">
+                                                <button class="dropdown-item text-light"><i class="fal fa-trash-alt me-2"></i>Delete</button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>    
+                            </div>
+                        </div>
+                        <div id="edit<%= review._id %>" class="edit-box">                            
+                            <div class="row">   
+                                <form action='/movie/<%= movie._id %>/review/<%= review._id %>?_method=PUT' method="POST">                                                    
+                                    <div>                        
+                                        <div>
+                                            <input type="text" maxlength="200" class="form-control bg-transparent border-1 text-light" id="floatingInput" name="review[text]" value="<%= review.text %>" placeholder="<%= review.text %>" required></input>
+                                        </div>
+                                        <fieldset class="rating">
+                                            <% if(review.rating == 5){ %>
+                                            <input type="radio" id="starEdit5<%= review.id %>" name="review[rating]" value="5" checked/><label id="label-rating" class = "full" for="starEdit5<%= review.id %>" title="Awesome - 5 stars"></label>
+                                            <input type="radio" id="starEdit4<%= review.id %>" name="review[rating]" value="4" /><label id="label-rating" class = "full" for="starEdit4<%= review.id %>" title="Pretty good - 4 stars"></label>
+                                            <input type="radio" id="starEdit3<%= review.id %>" name="review[rating]" value="3" /><label id="label-rating" class = "full" for="starEdit3<%= review.id %>" title="Average - 3 stars"></label>
+                                            <input type="radio" id="starEdit2<%= review.id %>" name="review[rating]" value="2" /><label id="label-rating" class = "full" for="starEdit2<%= review.id %>" title="Kinda bad - 2 stars"></label>
+                                            <input type="radio" id="starEdit1<%= review.id %>" name="review[rating]" value="1" /><label id="label-rating" class = "full" for="starEdit1<%= review.id %>" title="Sucks big time - 1 star"></label>
+                                            <% }else if(review.rating == 4){ %>
+                                            <input type="radio" id="starEdit5<%= review.id %>" name="review[rating]" value="5" /><label id="label-rating" class = "full" for="starEdit5<%= review.id %>" title="Awesome - 5 stars"></label>
+                                            <input type="radio" id="starEdit4<%= review.id %>" name="review[rating]" value="4" checked/><label id="label-rating" class = "full" for="starEdit4<%= review.id %>" title="Pretty good - 4 stars"></label>
+                                            <input type="radio" id="starEdit3<%= review.id %>" name="review[rating]" value="3" /><label id="label-rating" class = "full" for="starEdit3<%= review.id %>" title="Average - 3 stars"></label>
+                                            <input type="radio" id="starEdit2<%= review.id %>" name="review[rating]" value="2" /><label id="label-rating" class = "full" for="starEdit2<%= review.id %>" title="Kinda bad - 2 stars"></label>
+                                            <input type="radio" id="starEdit1<%= review.id %>" name="review[rating]" value="1" /><label id="label-rating" class = "full" for="starEdit1<%= review.id %>" title="Sucks big time - 1 star"></label>
+                                            <% }else if(review.rating == 3){ %>
+                                            <input type="radio" id="starEdit5<%= review.id %>" name="review[rating]" value="5" /><label id="label-rating" class = "full" for="starEdit5<%= review.id %>" title="Awesome - 5 stars"></label>
+                                            <input type="radio" id="starEdit4<%= review.id %>" name="review[rating]" value="4" /><label id="label-rating" class = "full" for="starEdit4<%= review.id %>" title="Pretty good - 4 stars"></label>
+                                            <input type="radio" id="starEdit3<%= review.id %>" name="review[rating]" value="3" checked/><label id="label-rating" class = "full" for="starEdit3<%= review.id %>" title="Average - 3 stars"></label>
+                                            <input type="radio" id="starEdit2<%= review.id %>" name="review[rating]" value="2" /><label id="label-rating" class = "full" for="starEdit2<%= review.id %>" title="Kinda bad - 2 stars"></label>
+                                            <input type="radio" id="starEdit1<%= review.id %>" name="review[rating]" value="1" /><label id="label-rating" class = "full" for="starEdit1<%= review.id %>" title="Sucks big time - 1 star"></label>
+                                            <% }else if(review.rating == 2){ %>
+                                            <input type="radio" id="starEdit5<%= review.id %>" name="review[rating]" value="5" /><label id="label-rating" class = "full" for="starEdit5<%= review.id %>" title="Awesome - 5 stars"></label>
+                                            <input type="radio" id="starEdit4<%= review.id %>" name="review[rating]" value="4" /><label id="label-rating" class = "full" for="starEdit4<%= review.id %>" title="Pretty good - 4 stars"></label>
+                                            <input type="radio" id="starEdit3<%= review.id %>" name="review[rating]" value="3" /><label id="label-rating" class = "full" for="starEdit3<%= review.id %>" title="Average - 3 stars"></label>
+                                            <input type="radio" id="starEdit2<%= review.id %>" name="review[rating]" value="2" checked/><label id="label-rating" class = "full" for="starEdit2<%= review.id %>" title="Kinda bad - 2 stars"></label>
+                                            <input type="radio" id="starEdit1<%= review.id %>" name="review[rating]" value="1" /><label id="label-rating" class = "full" for="starEdit1<%= review.id %>" title="Sucks big time - 1 star"></label>
+                                            <% }else if(review.rating == 1){ %>
+                                            <input type="radio" id="starEdit5<%= review.id %>" name="review[rating]" value="5" /><label id="label-rating" class = "full" for="starEdit5<%= review.id %>" title="Awesome - 5 stars"></label>
+                                            <input type="radio" id="starEdit4<%= review.id %>" name="review[rating]" value="4" /><label id="label-rating" class = "full" for="starEdit4<%= review.id %>" title="Pretty good - 4 stars"></label>
+                                            <input type="radio" id="starEdit3<%= review.id %>" name="review[rating]" value="3" /><label id="label-rating" class = "full" for="starEdit3<%= review.id %>" title="Average - 3 stars"></label>
+                                            <input type="radio" id="starEdit2<%= review.id %>" name="review[rating]" value="2" /><label id="label-rating" class = "full" for="starEdit2<%= review.id %>" title="Kinda bad - 2 stars"></label>
+                                            <input type="radio" id="starEdit1<%= review.id %>" name="review[rating]" value="1" checked/><label id="label-rating" class = "full" for="starEdit1<%= review.id %>" title="Sucks big time - 1 star"></label>
+                                            <% } else{ %>
+                                            <input type="radio" id="starEdit5<%= review.id %>" name="review[rating]" value="5" /><label id="label-rating" class = "full" for="starEdit5<%= review.id %>" title="Awesome - 5 stars"></label>
+                                            <input type="radio" id="starEdit4<%= review.id %>" name="review[rating]" value="4" /><label id="label-rating" class = "full" for="starEdit4<%= review.id %>" title="Pretty good - 4 stars"></label>
+                                            <input type="radio" id="starEdit3<%= review.id %>" name="review[rating]" value="3" /><label id="label-rating" class = "full" for="starEdit3<%= review.id %>" title="Average - 3 stars"></label>
+                                            <input type="radio" id="starEdit2<%= review.id %>" name="review[rating]" value="2" /><label id="label-rating" class = "full" for="starEdit2<%= review.id %>" title="Kinda bad - 2 stars"></label>
+                                            <input type="radio" id="starEdit1<%= review.id %>" name="review[rating]" value="1" /><label id="label-rating" class = "full" for="starEdit1<%= review.id %>" title="Sucks big time - 1 star"></label>
+                                            <% } %>
+                                        </fieldset>
+                                    </div>
+                                    <div style="float: right; padding-top: 40px;">                                        
+                                        <button class="bg-transparent border-0" type="submit"><i class="fas fa-paper-plane text-light fa-lg pe-4" aria-hidden="true"></i></button>
+                                        <a class="bg-transparent border-0" onclick="cancelEdit('<%= review._id %>')" style="cursor: pointer;"><i class="fas fa-times text-light fa-lg" aria-hidden="true"></i></a>
+                                    </div>                                    
+                                </form>
+                            </div>
+                        </div>
+                        <% }else{ %>
+                        <div class="pb-4 review-box">
+                            <div class="review-other shadow-lg row">
+                                <div class="text-light col-11">
+                                    <div>
+                                        <% if(review.rating == ''){}else{ %>
+                                            <% for(i=1; i <= review.rating; i++){ %>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <% } %>
+                                        <% } %>
+                                    </div>   
+                                    <strong class="h5 fw-bold"><%= review.author.username %>&nbsp:&nbsp</strong>
+                                    <div class="border-0 card bg-transparent d-block"><%= review.text %></div>
+                                </div>
+                                <div class="btn-group col-1 d-flex justify-content-end">
+                                    <button class="border-0 bg-transparent dropdown-toggle dropdown-toggle-review text-light" type="button" id="defaultDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false"><i class="far fa-ellipsis-v"></i></button>
+                                    <ul class="dropdown-menu bg-dark" aria-labelledby="defaultDropdown">
+                                        <li><a class="dropdown-item text-light" href="/movie/<%= movie._id %>/review/<%= review._id %>/edit"><i class="fal fa-flag-alt me-2"></i>Report</a></li>                                
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+                    <% }); %>
+                </div>
+            <% }; %>
+        </div>
+    </div>
+    <div class="py-5"></div>
+</div>
+
+<%- include('../partials/footer.ejs') %>

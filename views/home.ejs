@@ -1,0 +1,220 @@
+<%- include('partials/header.ejs') %>
+
+<div class="pt-5">
+  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <% let i=0; %>
+        <% while(i <= promotion.length + 2){ %>
+            <% if(i === 0){ %>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="<%= i %>" class="active" aria-current="true" aria-label="Slide <%= i %>"></button>
+            <% i++; %>
+            <% }else{ %>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="<%= i %>" aria-label="Slide <%= i %>"></button>
+            <% i++; %>
+            <% } %>
+        <% }; %>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active bg-transparent">
+        <img src="/img/poster-1.png" class="d-block w-100 tales">
+      </div>
+      <div class="carousel-item bg-transparent">
+        <img src="/img/poster-2.png" class="d-block w-100 tales">
+      </div>
+      <div class="carousel-item bg-transparent">
+        <img src="/img/poster-3.png" class="d-block w-100 tales">
+      </div>
+      <% promotion.forEach(function(promotion){ %>
+      <div class="carousel-item bg-transparent">
+        <img src="<%= promotion.image %>" class="d-block w-100 tales">
+      </div>
+      <% }); %>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</div>
+<div class="container-main shadow-lg">
+  <h2 class="text-light fw-bold" style="margin-left: 6%; padding-top: 90px;"><i class="fad fa-camera-movie me-3"></i>Now showing</h2>
+  <div class="album pt-3">
+    <div class="container-home">
+        <div class="row">
+          <% var count = 0 ; %>          
+            <% movie.forEach(function(movie){ %> 
+              <% if(count >= 6){ %>
+              <% }else{ count++ %>
+              <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-12 pt-4">      
+                <div class="card-movie border-0">
+                  <div class="wrapper-home" style="background-image: linear-gradient(rgba(0, 0, 0, 0),rgba(0, 0, 0, 0.5),rgba(0,0,0,0.9)),url('<%= movie.poster %>');background-position: center;background-size: cover;">                    
+                    <div class="header-card-movie">                      
+                      <ul class="menu-content ">
+                        <li>
+                          <% if(!currentUser){ %>
+                            <form action="/movie/<%= movie._id %>/addFavorite" method="POST">
+                              <input value="<%= movie._id %>" name="movie" class="visually-hidden">
+                              <button title="Add to favorite"><i class="fa fa-heart-o fa-xl text-light"></i></button>
+                            </form>
+                          <% }else{ let j = 0; %> 
+                            <% currentUser.favoriteMovie.forEach(function(favMovie){ %>
+                            <% if(favMovie.equals(movie._id)){ j++; }%>
+                            <% }); %>
+                            <% if(j > 0){ %>
+                              <form action="/movie/<%= movie._id %>/removeFavorite" method="POST">
+                                <input value="<%= movie._id %>" name="movie" class="visually-hidden">
+                                <button title="Add to favorite"><i class="fa fa-heart-o fa-xl text-danger"></i></button>
+                              </form>
+                            <% }else{ %>
+                              <form action="/movie/<%= movie._id %>/addFavorite" method="POST">
+                                <input value="<%= movie._id %>" name="movie" class="visually-hidden">
+                                <button title="Add to favorite"><i class="fa fa-heart-o fa-xl text-light"></i></button>
+                              </form>
+                            <% } %>
+                          <% } %>
+                        </li>
+                        <li>
+                          <a href="/movie/<%= movie._id %>" title="Average rating by user" class="fas fa-star fa-xl text-decoration-none">
+                              <span>
+                              <% if(movie.reviews.length == 0){ %>
+                                  N/A                                                    
+                              <% }else{ let i = 0; %>
+                                  <% movie.reviews.forEach(function(review){ %>
+                                      <% i += review.rating %>
+                                  <% }); %>
+                                  <%= (i/movie.reviews.length).toFixed(1) %>
+                              <% } %>
+                              </span>
+                          </a>
+                        </li>
+                        <li><a href="/movie/<%= movie._id %>" class="fa fa-comment-o fa-xl text-decoration-none"><span><%= movie.reviews.length %></span></a></li>
+                      </ul>
+                    </div>                    
+                    <div class="data">                      
+                      <div class="content" style="transform: rotate(0);">
+                        <span>Release date: <%= movie.date %></span>                      
+                        <h4 class="movie-title" style="font-weight: 700;"><%= movie.name %></h4>
+                        <p class="text">
+                        <p><i class="fa fa-clock-o me-3" aria-hidden="true"></i><%= movie.time %></p>
+                        <p><i class="fa fa-tag me-3" aria-hidden="true"></i><%= movie.type %></p>
+                        <p><i class="fa fa-calendar-o me-3" aria-hidden="true"></i><%= movie.date %></p>
+                        </p>    
+                        <a href="/movie/<%= movie._id %>" class="stretched-link"></a>                    
+                      </div>
+                      <a href="/movie/<%= movie._id %>" class="button">Show more</a>
+                    </div>
+                  </div>
+                </div>          
+              </div> 
+              <% } %>
+            <% }); %>          
+        </div>
+    </div>
+  </div>
+  <h2 class="text-light fw-bold" style="margin-left: 6%; padding-top: 90px;"><i class="fad fa-stars me-3"></i>Popular now</h2>
+  <div class="album pt-3">
+    <div class="container-home">
+      <input class="visually-hidden" value="rating" id="sort-by">
+      <div class="row" id="movie-row">
+          <% popMovie.forEach(function(movie){ %>
+                <% var star = 0; %>
+                <% if(movie.rating.length == 0){ %>
+                <% }else{ %>                
+                <% movie.rating.forEach(function(rate){ %>
+                    <% star = star + rate %>
+                <% }); %>                
+                <% star = (star/movie.rating.length).toFixed(1) %>                
+                <% } %>
+                <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-12 pt-4 searchable" data-rating="<%= star %>" data-name="<%= movie.name %>">      
+                    <div class="card-movie border-0">
+                        <div class="wrapper-home" style="background-image: linear-gradient(rgba(0, 0, 0, 0),rgba(0, 0, 0, 0.5),rgba(0,0,0,0.9)),url('<%= movie.poster %>');background-position: center;
+                            background-size: cover;">                    
+                            <div class="header-card-movie">                      
+                            <ul class="menu-content ">
+                                <li>
+                                    <% if(!currentUser){ %>
+                                        <form action="/movie/<%= movie._id %>/addFavorite" method="POST">
+                                            <input value="<%= movie._id %>" name="movie" class="visually-hidden">
+                                            <button title="Add to favorite"><i class="fa fa-heart-o fa-xl text-light"></i></button>
+                                        </form>
+                                    <% }else{ let j = 0; %> 
+                                        <% currentUser.favoriteMovie.forEach(function(favMovie){ %>
+                                        <% if(favMovie.equals(movie._id)){ j++; }%>
+                                        <% }); %>
+                                        <% if(j > 0){ %>
+                                            <form action="/movie/<%= movie._id %>/removeFavorite" method="POST">
+                                                <input value="<%= movie._id %>" name="movie" class="visually-hidden">
+                                                <button title="Add to favorite"><i class="fa fa-heart-o fa-xl text-danger"></i></button>
+                                            </form>
+                                        <% }else{ %>
+                                            <form action="/movie/<%= movie._id %>/addFavorite" method="POST">
+                                                <input value="<%= movie._id %>" name="movie" class="visually-hidden">
+                                                <button title="Add to favorite"><i class="fa fa-heart-o fa-xl text-light"></i></button>
+                                            </form>
+                                        <% } %>
+                                    <% } %>
+                                </li>
+                                <li>
+                                    <a href="/movie/<%= movie._id %>" title="Average rating by user" class="fas fa-star fa-xl text-decoration-none">
+                                        <span>
+                                        <% if(movie.rating.length == 0){ %>
+                                            N/A                                                    
+                                        <% }else{ %>                                
+                                          <%= star %>
+                                        <% } %>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li><a href="/movie/<%= movie._id %>" class="fa fa-comment-o fa-xl text-decoration-none"><span><%= movie.reviews.length %></span></a></li>
+                            </ul>
+                            </div>                    
+                            <div class="data">                      
+                                <div class="content" style="transform: rotate(0);">
+                                    <span>Release date: <%= movie.date %></span>                      
+                                    <h4 class="movie-title" style="font-weight: 700;"><%= movie.name %></h4>
+                                    <p class="text">
+                                    <p><i class="fa fa-clock-o me-3" aria-hidden="true"></i><%= movie.time %></p>
+                                    <p><i class="fa fa-tag me-3" aria-hidden="true"></i><%= movie.type %></p>
+                                    <p><i class="fa fa-calendar-o me-3" aria-hidden="true"></i><%= movie.date %></p>
+                                    </p>    
+                                    <a href="/movie/<%= movie._id %>" class="stretched-link"></a>                    
+                                </div>
+                                <a href="/movie/<%= movie._id %>" class="button">Show more</a>
+                            </div>
+                        </div>
+                    </div>          
+                </div>
+          <% }); %>
+      </div>
+    </div>
+  </div>
+  <div class="py-5"></div>
+</div>
+<script>
+  var searchableItems    = document.querySelectorAll('.searchable')
+      sortBy             = document.querySelector('#sort-by')
+      listContainer      = document.querySelector('#movie-row');
+
+  function sortMovie() {
+
+      let itemsArray = Array.prototype.slice.call(searchableItems, 0);
+      itemsArray = itemsArray.sort(function(a, b) {
+          let aVal = ('rating' == sortBy.value) ? b.dataset.rating : a.dataset.name.toLowerCase();
+          let bVal = ('rating' == sortBy.value) ? a.dataset.rating : b.dataset.name.toLowerCase();
+          return aVal > bVal ? 1 : -1;
+      });
+      
+      listContainer.innerHTML = '';
+      itemsArray.forEach(function(item, index){
+          listContainer.append(item);
+      });
+  }
+
+  sortMovie();
+</script>
+
+<%- include('partials/footer.ejs') %>

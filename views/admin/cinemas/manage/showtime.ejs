@@ -1,0 +1,186 @@
+<%- include('../../../partials/headerAdmin.ejs') %>
+
+<script>
+    function searchDate() {
+      // Declare variables
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("search-input-date");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("table-showtime");
+      tr = table.getElementsByTagName("tr");
+    
+      // Loop through all table rows, and hide those who don't match the search query
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[1];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+    function searchTime() {
+      // Declare variables
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("search-input-showtime");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("table-showtime");
+      tr = table.getElementsByTagName("tr");
+    
+      // Loop through all table rows, and hide those who don't match the search query
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[2];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+    function edit(id) {
+        document.getElementById(id).style.display = 'none';
+        document.getElementById('edit'+id).style.display = 'block';
+    }
+    function cancel(id) {
+        document.getElementById(id).style.display = 'block';
+        document.getElementById('edit'+id).style.display = 'none';
+    }
+</script>
+
+<div class="py-5">
+    <div class="d-flex justify-content-between">
+        <h2 class="fw-bold">
+            <a href="/admin/cinema/<%= cinema._id %>/manage" class="back-link">
+                <i class="far fa-chevron-left fw-bold pe-2" aria-hidden="true"></i>
+            </a>
+            <%= cinema.branch %> : Theater <%= theater.theaterNo %>            
+        </h2>
+        <div class="d-flex">
+            <h4 class="mt-2">Search: </h4>
+            <input type="time" class="form-control mx-2" id="search-input-showtime" onchange="searchTime()">        
+            <input type="date" class="form-control mx-2" id="search-input-date" onchange="searchDate()">
+        </div>
+    </div>
+    <hr>
+    <h3 class="pt-5 pb-3">Add showtime</h3>
+    <form action="/admin/cinema/<%= cinema._id %>/manage/theater/<%= theater._id %>/showtime" method="POST">
+        <div class="row px-5 pb-5">
+            <div class="col-xl-4">
+                <h5 class="my-3">Select movie</h5>
+                <select class="form-select form-select-lg" name="showtime[movie]" required>
+                    <option selected class="text-secondary">--none--</option>
+                    <% cinema.movies.forEach(function(movie){ %>
+                    <option  value="<%= movie._id %>"><%= movie.name %></option>
+                    <% }); %>
+                </select>            
+            </div>
+            <div class="col-xl-3">
+                <h5 class="my-3">Select date</h5>
+                <div class="form-floating">
+                    <input class="form-control" type="date" name="showtime[date]" id="example-date-input" required>
+                    <label for="floatingInput">Date</label>
+                </div>
+            </div>
+            <div class="col-xl-3">
+                <h5 class="my-3">Select time</h5>
+                <div class="form-floating">
+                    <input class="form-control" type="time" name="showtime[time]" min="10:00:00" max="22:00:00" id="example-date-input" required>
+                    <label for="floatingInput">Showtime</label>
+                </div>
+            </div>
+            <div class="col-xl-2 mt-1">
+                <button class="btn px-3 mx-2 mt-5 border-0"><i class="fa fa-plus fa-lg" aria-hidden="true"></i>&nbspAdd</button>
+            </div>
+        </div>
+    </form>
+    <table class="table" id="table-showtime">
+        <thead class="h3">
+            <tr class="align-top text-center">
+                <th scope="col">Movie</th>
+                <th scope="col">Date</th>
+                <th scope="col">Showtime</th>
+                <th scope="col">Seat available</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="h5">
+        <% theater.showtime.forEach(function(showtime){ %>
+            <tr class="align-middle text-center">
+                <td scope="col">
+                    <div id="<%= showtime._id %><%= showtime._id %>" style="cursor: pointer;" title="edit" onclick="edit('<%= showtime._id %><%= showtime._id %>')">
+                        <img src="<%= showtime.movie.poster %>" class="img-poster">
+                    </div>
+                    <div id="edit<%= showtime._id %><%= showtime._id %>" class="text-center" style="display: none;">
+                        <div class="d-flex justify-content-center">
+                            <form action="/admin/cinema/<%= cinema._id %>/manage/theater/<%= theater._id %>/showtime/<%= showtime._id %>?_method=PUT" class="d-flex" method="POST">
+                                <select class="form-select form-select-lg" name="showtime[movie]" required>
+                                    <% cinema.movies.forEach(function(movie){ %>
+                                        <% if(movie._id.equals(showtime.movie._id)){ %>
+                                        <option  value="<%= movie._id %>" selected><%= movie.name %></option>
+                                        <% }else{ %>                                        
+                                        <option  value="<%= movie._id %>"><%= movie.name %></option>
+                                        <% } %>
+                                    <% }); %>                                    
+                                </select>
+                                <button class="bg-transparent border-0" type="submit"><i class="fw-bold text-success fal fa-check"></i></button>
+                            </form>
+                            <button class="bg-transparent border-0" onclick="cancel('<%= showtime._id %><%= showtime._id %>')"><i class="fw-bold text-danger fal fa-times"></i></button>
+                        </div>
+                    </div>                                
+                </td>
+                <td scope="col">
+                    <div id="<%= showtime._id %><%= showtime.date %>" style="cursor: pointer;" title="edit" onclick="edit('<%= showtime._id %><%= showtime.date %>')">
+                        <%= showtime.date %>
+                    </div>
+                    <div id="edit<%= showtime._id %><%= showtime.date %>" class="text-center" style="display: none;">
+                        <div class="d-flex justify-content-center">
+                            <form action="/admin/cinema/<%= cinema._id %>/manage/theater/<%= theater._id %>/showtime/<%= showtime._id %>?_method=PUT" method="POST">
+                                <input class="from-control" type="date" name="showtime[date]" placeholder="<%= showtime.date %>" value="<%= showtime.date %>" />
+                                <button class="bg-transparent border-0" type="submit"><i class="fw-bold text-success fal fa-check"></i></button>
+                            </form>
+                            <button class="bg-transparent border-0" onclick="cancel('<%= showtime._id %><%= showtime.date %>')"><i class="fw-bold text-danger fal fa-times"></i></button>
+                        </div>
+                    </div>
+                </td>
+                <td scope="col">
+                    <div id="<%= showtime._id %><%= showtime.time %>" style="cursor: pointer;" title="edit" onclick="edit('<%= showtime._id %><%= showtime.time %>')">
+                        <%= showtime.time %>
+                    </div>
+                    <div id="edit<%= showtime._id %><%= showtime.time %>" class="text-center" style="display: none;">
+                        <div class="d-flex justify-content-center">
+                            <form action="/admin/cinema/<%= cinema._id %>/manage/theater/<%= theater._id %>/showtime/<%= showtime._id %>?_method=PUT" method="POST">
+                                <input class="from-control" type="time" name="showtime[time]" placeholder="<%= showtime.time %>" value="<%= showtime.time %>" />
+                                <button class="bg-transparent border-0" type="submit"><i class="fw-bold text-success fal fa-check"></i></button>
+                            </form>
+                            <button class="bg-transparent border-0" onclick="cancel('<%= showtime._id %><%= showtime.time %>')"><i class="fw-bold text-danger fal fa-times"></i></button>
+                        </div>
+                    </div>
+                </td>
+                <td scope="col">
+                <% let i = 0; %>                        
+                <% showtime.seat.forEach(function(seat){ %>
+                    <% if(!seat.available){  %>
+                    <% return i; %>
+                    <% }else{i++;} %>
+                <% }); %>                       
+                <%= i %>   
+                </th>
+                <td scope="col">                    
+                    <form action="/admin/cinema/<%= cinema._id %>/manage/theater/<%= theater._id %>/showtime/<%= showtime._id %>?_method=DELETE" method="POST" onsubmit="if(!confirm('Confirm this action?')){return false;}">
+                        <button title="Remove showtime" class="border-0 bg-transparent py-2 px-3" method="POST" ><i class="fad fa-times-circle fa-3x me-2 text-danger"></i></button>
+                    </form>                      
+                </td>
+            </tr>
+        <% }) %>
+        </tbody>
+    </table>
+</div>
+
+
+<%- include('../../../partials/footerAdmin.ejs') %>

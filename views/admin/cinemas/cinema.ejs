@@ -1,0 +1,109 @@
+<%- include('../../partials/headerAdmin.ejs') %>
+
+<script>
+    function searchCinema() {
+      // Declare variables
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("search-input-cinema");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("table-cinema");
+      tr = table.getElementsByTagName("tr");
+    
+      // Loop through all table rows, and hide those who don't match the search query
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+    function editBranch(id) {
+        document.getElementById(id).style.display = 'none';
+        document.getElementById('edit'+id).style.display = 'block';
+    }
+    function cancelEdit(id) {
+        document.getElementById(id).style.display = 'block';
+        document.getElementById('edit'+id).style.display = 'none';
+    }
+</script>
+<div class="py-5">
+  <div class="d-flex justify-content-between">
+    <h2 class="fw-bold">All cinema
+      <a href="/admin/cinema/new" class="btn btn-primary">
+        <i class="fal fa-plus" aria-hidden="true"></i>&nbspAdd new cinema
+      </a>
+    </h2>
+    <div class="d-flex">    
+      <input type="text" class="form-control" id="search-input-cinema" onkeyup="searchCinema()" placeholder="Search for branch">
+    </div> 
+  </div>
+  <hr>
+  <table class="table" id="table-cinema">
+    <thead class="h3">
+        <tr class="align-top">
+          <th scope="col" class="text-center">#</th>
+          <th scope="col">Branch</th>
+          <th scope="col" class="text-center">Movie available</th>
+          <th scope="col" class="text-center">Number of theater</th>
+          <th scope="col" class="text-center">Actions</th>
+        </tr>
+    </thead>
+    <tbody class="h5">
+      <% var i=0; %>        
+      <% cinema.forEach(function(cinema){i++ %>
+          <tr class="align-middle">
+              <th scope="col" class="text-center"><%= i %></th>
+              <td scope="col">
+                <div id="<%= cinema._id %>"  onclick="editBranch('<%= cinema._id %>')">
+                  <%= cinema.branch %>
+                </div>
+                <div id="edit<%= cinema._id %>" style="display: none;">
+                  <div class="d-flex">
+                    <form action="/admin/cinema/<%= cinema._id %>?_method=PUT" method="POST">
+                      <input class="from-control" name="cinema[branch]" placeholder="<%= cinema.branch %>" value="<%= cinema.branch %>"/>
+                      <button class="bg-transparent border-0" type="submit"><i class="fw-bold text-success fal fa-check"></i></button>
+                    </form>
+                    <button class="bg-transparent border-0" onclick="cancelEdit('<%= cinema._id %>')"><i class="fw-bold text-danger fal fa-times"></i></button>
+                  </div>
+                </div>
+              </td>
+              <td scope="col" class="text-center">
+                <% for(j=0; j < cinema.movies.length; j++) %>
+                <%= j %>
+              </td>
+              <td scope="col" class="text-center">
+                <% for(j=0; j < cinema.theater.length; j++) %>
+                <%= j %>
+              </td>
+              <td scope="col" class="text-center">
+                  <button class="border-0 bg-transparent dropdown-toggle" type="button" id="defaultDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false"><i class="fad fa-cogs fa-2x"></i></button>
+                  <ul class="dropdown-menu" aria-labelledby="defaultDropdown">                        
+                      <li style="position: relative;">
+                          <form action="/admin/cinema/<%= cinema._id %>/manage" method="GET">
+                              <button class="border-0 bg-transparent py-2 px-3 stretched-link"><i class="fal fa-layer-group me-2"></i>Manage</button>
+                          </form>
+                      </li>
+                      <li style="position: relative;">
+                        <form action="/admin/cinema/<%= cinema._id %>/manageMovie" method="GET">
+                            <button class="border-0 bg-transparent py-2 px-3 stretched-link"><i class="fal fa-film me-2"></i>Add & Delete movie</button>
+                        </form>
+                      </li>                   
+                      <li style="position: relative;"> 
+                          <form action="/admin/cinema/<%= cinema._id %>?_method=DELETE" method="POST" onsubmit="if(!confirm('Confirm this action?')){return false;}">
+                              <button class="border-0 bg-transparent py-2 px-3 stretched-link"><i class="fal fa-trash me-2"></i>Delete</button>
+                          </form>
+                      </li>
+                  </ul>     
+              </td>
+          </tr>
+      <% }); %>
+      </tbody>
+  </table>
+</div>
+
+<%- include('../../partials/footerAdmin.ejs') %>

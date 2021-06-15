@@ -1,0 +1,89 @@
+<%- include('../../partials/headerAdmin.ejs') %>
+
+<script>
+    function searchMovie() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("search-input-movie");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("table-movie");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[2];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+<div class="py-5">
+    <div>
+        <h2 class="fw-bold">
+            <a href="/admin/cinema" class="back-link">
+                <i class="far fa-chevron-left fw-bold pe-2" aria-hidden="true"></i>
+            </a>
+            Add new Cinema
+        </h2>
+    </div> 
+    <hr>
+    <form action="/admin/cinema/new" method="POST">
+        <div class="d-flex justify-content-center">
+            <div class="mx-2 col-md-5 col-sm-4">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingInput" placeholder="Branch" name="cinema[branch]" required>
+                    <label for="floatingInput">Branch</label>
+                </div>
+            </div>
+            <div class="mx-2 col-md-5 col-sm-4">        
+                <div class="form-floating">
+                    <input type="number" min="1" max="9" oninput="this.value = !!this.value && Math.abs(this.value) > 0 ? Math.abs(this.value) : null" class="form-control" id="floatingInput" placeholder="Branch" name="numOfTheater" required>
+                    <label for="floatingInput">Number of theater</label>
+                </div>
+            </div>
+            <div class="col-md-1 col-sm-2">
+                <button class="btn btn-lg btn-primary" type="submit">Submit</button>
+            </div>
+        </div>
+        <div class="pt-3 px-5">
+            <div class="m-1 py-3 rounded row">
+                <div class="d-flex justify-content-between mb-5">
+                    <h4 class="mb-4">Select movie showing</h4>
+                    <div class="d-flex">                             
+                        <input type="text" class="form-control" id="search-input-movie" onkeyup="searchMovie()" placeholder="Search for name">
+                    </div>  
+                </div>              
+                <table class="table" id="table-movie">
+                    <thead class="h3">
+                        <tr class="align-top">
+                            <th scope="col" class="text-center">Select</th>
+                            <td scope="col" class="text-center">Poster</td>
+                            <th scope="col">Name</th>
+                            <th scope="col" class="text-center">Release date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="h5">
+                        <% movie.forEach(function(movie){ %>
+                        <tr class="align-middle">
+                            <td scope="col" class="text-center">
+                                <div class="d-flex justify-content-center">
+                                    <input type="checkbox" name="cinema[movies]" class="form-check-input" style="display: block !important;" value="<%= movie._id %>" />
+                                </div>
+                            </td>
+                            <td scope="col" class="text-center"><img src="<%= movie.poster %>" class="img-poster-edit"></td>
+                            <td scope="col"><%= movie.name %></td>
+                            <td scope="col" class="text-center"><%= movie.date %></td>                            
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+</div>
+
+<%- include('../../partials/footerAdmin.ejs') %>

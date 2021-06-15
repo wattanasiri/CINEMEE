@@ -1,0 +1,230 @@
+<%- include('../partials/header.ejs') %>
+
+<div class="container pt-5 mt-4" id="sectionProfile">
+    <div class="text-light container">
+        <h2 class="fw-bold">My profile</h2>
+    </div>
+</div>
+<div class="container-profile">
+    <div class="container-profile-inner">
+        <div class="row">
+            <div class="col-xl-4 col-sm-12 px-5 img-edit">
+                <div class="card bg-transparent border-5 rounded-0 border-light img-edit">
+                    <img src="<%= user.image%>" class="profile-pic">
+                </div>
+            </div>
+            <div class="col-xl-2 col-sm-6 text-light">
+                <h2 class="fw-bold mt-3">First name</h2>
+                <h2 class="fw-bold mt-3">Last name</h2>
+                <h4 class="fw-bold mt-3">Username</h4>
+                <h4 class="fw-bold mt-3">Email</h4>
+            </div>
+            <div class="col-xl-4 text-light col-sm-6">
+                <h2 class="mt-3"><%= user.firstname %></h2>
+                <h2 class="mt-3"><%= user.lastname %></h2>
+                <h4 class="mt-3"><%= user.username %></h4>
+                <h4 class="mt-3"><%= user.email %></h4>            
+            </div>
+            <div class="col-xl-2">
+                <div class="d-flex justify-content-end">
+                    <a class="text-light edit-button" href="/profile/<%= user._id %>/edit" title="Edit profile"><i class="fal fa-edit fa-2x fw-bold"></i></a>
+                </div>
+                <div class="d-flex justify-content-end mt-3 me-1">
+                    <form action="/profile/<%= user._id %>/delete?_method=DELETE" method="POST" onsubmit="if(!confirm('Confirm this action?')){return false;}">
+                        <button class="text-danger edit-button" title="Delete Account"><i class="fad fa-trash-alt fa-2x fw-bold"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-5" id="sectionFavorite">
+    <% if(user.favoriteMovie == ''){}else{ %>        
+    <div class="text-light container mt-5 pt-2">
+        <h2 class="fw-bold">Favorite Movie</h2>
+        <div class="row">
+        <% user.favoriteMovie.forEach(function(movie){ %>
+            <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-6 col-sm-12 pt-4">      
+                <div class="card-movie border-0">
+                    <div class="wrapper-home" style="background-image: linear-gradient(rgba(0, 0, 0, 0),rgba(0, 0, 0, 0.5),rgba(0,0,0,0.9)),url('<%= movie.poster %>');background-position: center;
+                        background-size: cover;">                    
+                        <div class="header-card-movie">                      
+                        <ul class="menu-content ">
+                            <li>
+                                <% if(!user){ %>
+                                    <form action="/movie/<%= movie._id %>/addFavorite" method="POST">
+                                        <input value="<%= movie._id %>" name="movie" class="visually-hidden">
+                                        <button title="Add to favorite"><i class="fa fa-heart-o fa-xl text-light"></i></button>
+                                    </form>
+                                <% }else{ let j = 0; %> 
+                                    <% user.favoriteMovie.forEach(function(favMovie){ %>
+                                    <% if(favMovie.equals(movie._id)){ j++; }%>
+                                    <% }); %>
+                                    <% if(j > 0){ %>
+                                        <form action="/movie/<%= movie._id %>/removeFavorite" method="POST">
+                                            <input value="<%= movie._id %>" name="movie" class="visually-hidden">
+                                            <button title="Add to favorite"><i class="fa fa-heart-o fa-xl text-danger"></i></button>
+                                        </form>
+                                    <% }else{ %>
+                                        <form action="/movie/<%= movie._id %>/addFavorite" method="POST">
+                                            <input value="<%= movie._id %>" name="movie" class="visually-hidden">
+                                            <button title="Add to favorite"><i class="fa fa-heart-o fa-xl text-light"></i></button>
+                                        </form>
+                                    <% } %>
+                                <% } %>
+                            </li>
+                            <li>
+                                <a href="/movie/<%= movie._id %>" title="Average rating by user" class="fas fa-star fa-xl text-decoration-none">
+                                    <span>
+                                    <% if(movie.reviews.length == 0){ %>
+                                        N/A                                                    
+                                    <% }else{ let i = 0; %>
+                                        <% movie.reviews.forEach(function(review){ %>
+                                            <% i += review.rating %>
+                                        <% }); %>
+                                        <%= (i/movie.reviews.length).toFixed(1) %>
+                                    <% } %>
+                                    </span>
+                                </a>
+                              </li>
+                            <li><a href="/movie/<%= movie._id %>" class="fa fa-comment-o fa-xl text-decoration-none"><span><%= movie.reviews.length %></span></a></li>
+                        </ul>
+                        </div>                    
+                        <div class="data">                      
+                            <div class="content" style="transform: rotate(0);">
+                                <span>Release date: <%= movie.date %></span>                      
+                                <h4 class="movie-title" style="font-weight: 700;"><%= movie.name %></h4>
+                                <p class="text">
+                                <p><i class="fa fa-clock-o me-3" aria-hidden="true"></i><%= movie.time %></p>
+                                <p><i class="fa fa-tag me-3" aria-hidden="true"></i><%= movie.type %></p>
+                                <p><i class="fa fa-calendar-o me-3" aria-hidden="true"></i><%= movie.date %></p>
+                                </p>    
+                                <a href="/movie/<%= movie._id %>" class="stretched-link"></a>                    
+                            </div>
+                            <a href="/movie/<%= movie._id %>" class="button">Show more</a>
+                        </div>
+                    </div>
+                </div>          
+              </div> 
+        <% }); %>
+        </div>
+    </div>
+    <% } %>
+    <% if(user.favoriteCinema == ''){}else{ %>
+    <div class="text-light container mt-5 pt-2">
+        <h2 class="fw-bold">Favorite Cinema</h2>
+        <div class="row">
+            <% user.favoriteCinema.forEach(function(cinema){ %>
+            <div class="col-xxl-4 col-xl-3 col-lg-4 col-md-6 col-sm-12 pt-4">      
+                <div class="card-cinema border-0">
+                    <div class="wrapper-home">                    
+                        <div class="header-card-cinema">                      
+                            <ul class="menu-content ">
+                                <li>
+                                    <% if(!currentUser){ %>
+                                        <form action="/cinema/<%= cinema._id %>/addFavorite" method="POST">
+                                            <input value="<%= cinema._id %>" name="cinema" class="visually-hidden">
+                                            <button title="Add to favorite"><i class="fa fa-heart-o fa-xl text-light"></i></button>
+                                        </form>
+                                    <% }else{ let j = 0; %> 
+                                        <% currentUser.favoriteCinema.forEach(function(favCinema){ %>
+                                        <% if(favCinema.equals(cinema._id)){ j++; }%>
+                                        <% }); %>
+                                        <% if(j > 0){ %>
+                                            <form action="/cinema/<%= cinema._id %>/removeFavorite" method="POST">
+                                                <input value="<%= cinema._id %>" name="cinema" class="visually-hidden">
+                                                <button title="Add to favorite"><i class="fa fa-heart-o fa-xl text-danger"></i></button>
+                                            </form>
+                                        <% }else{ %>
+                                            <form action="/cinema/<%= cinema._id %>/addFavorite" method="POST">
+                                                <input value="<%= cinema._id %>" name="cinema" class="visually-hidden">
+                                                <button title="Add to favorite"><i class="fa fa-heart-o fa-xl text-light"></i></button>
+                                            </form>
+                                        <% } %>
+                                    <% } %>
+                                </li>                                
+                            </ul>
+                        </div>                    
+                        <div class="data">                      
+                            <div class="content" style="transform: rotate(0);">                 
+                                <h4 class="movie-title" style="font-weight: 700;"><%= cinema.branch %></h4>
+                                <p class="text">
+                                <p><i class="far fa-camera-movie me-3" aria-hidden="true"></i>Movie available <%= cinema.movies.length %></p>
+                                <p><i class="far fa-popcorn me-3" aria-hidden="true"></i><%= cinema.theater.length %> Theater</p>
+                                </p>    
+                                <a href="/cinema/<%= cinema._id %>" class="stretched-link"></a>                    
+                            </div>
+                            <a href="/cinema/<%= cinema._id %>" class="button">Show more</a>
+                        </div>
+                    </div>
+                </div>          
+            </div> 
+            <% }); %>
+        </div>
+    </div>
+    <% } %>
+    <% if(transaction == ''){ %>
+    <% }else{ %>
+    <div class="text-light container my-5 pt-2" id="sectionHistory">
+        <h2 class="fw-bold">History</h2>
+        <div class="row text-dark">
+        <% transaction.forEach(function(transaction){ %>
+            <div class="col-xl-4 col-sm-12 mt-3">
+                <div class="bg-light w-100" style="height: 530px;">
+                    <div class="p-3">
+                        <div class="d-flex justify-content-center px-5">
+                            <img src="/img/CINEMEE-logo-dark(only).png" height="80px" class="w-100">
+                        </div>
+                        <hr>
+                        <div class="px-2">
+                            <div class="row my-2">
+                                <h5 class="col-5" style="font-weight: 600;">Branch</h5>
+                                <h5 class="text-end col-7"><%= transaction.branch %></h5>
+                            </div>
+                            <div class="row my-2">
+                                <h5 class="col-5" style="font-weight: 600;">Movie Title</h5>
+                                <h5 class="text-end col-7"><%= transaction.movie %></h5>
+                            </div>
+                            <div class="row my-2">
+                                <h5 class="col-5" style="font-weight: 600;">Date</h5>
+                                <h5 class="text-end col-7"><%= transaction.date %></h5>
+                            </div>
+                            <div class="row my-2">
+                                <h5 class="col-5" style="font-weight: 600;">Showtime</h5>
+                                <h5 class="text-end col-7"><%= transaction.showtime %></h5>
+                            </div>
+                            <div class="row my-2">
+                                <h5 class="col-5" style="font-weight: 600;">Theater No.</h5>
+                                <h5 class="text-end col-7"><%= transaction.theater %></h5>
+                            </div>
+                            <div class="row mt-2">
+                                <h5 class="col-5" style="font-weight: 600;">Selected Seat</h5>
+                                <h5 class="text-end col-7"><%= transaction.seat %></h5>
+                                <div class="px-3 mt-2">
+                                    <hr class="mb-0">
+                                    <hr class="mt-1">
+                                </div>
+                            </div>
+                            <div class="row">                        
+                                <h6 class="col-5" style="font-weight: 600;">Sub Total:</h6>
+                                <h6 class="text-end col-7"><%= (transaction.total*0.93).toFixed(2) %> Bath</h6>
+                            </div>  
+                            <div class="row">                        
+                                <h6 class="col-5" style="font-weight: 600;">VAT (7%):</h6>
+                                <h6 class="text-end col-7"><%= (transaction.total*0.07).toFixed(2) %> Bath</h6>
+                            </div>                    
+                            <div class="row">                        
+                                <h5 class="col-5" style="font-weight: bolder;">Total:</h5>
+                                <h5 class="text-end col-7"><%= transaction.total.toFixed(2) %> Bath</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>            
+            </div>
+        <% }); %>
+        </div>
+    </div>
+    <% } %>
+</div>
+
+<%- include('../partials/footer.ejs') %>

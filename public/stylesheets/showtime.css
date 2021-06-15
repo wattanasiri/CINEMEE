@@ -1,0 +1,90 @@
+.row-container {
+    margin-top: 30px;
+}
+.checkbox{
+    display: none;
+}
+#labelCheck {
+    margin: 5px;
+    width: 35px;
+    height: 30px;
+    background: #333133;
+    border: 2px solid #4A4645;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    transition: all .2s ease;
+    overflow: hidden;    
+}
+#labelCheck:nth-of-type(2) {
+    margin-right: 18px;
+}
+#labelCheck:nth-last-of-type(2) {
+    margin-left: 18px;
+}
+#labelCheck:not(.occupied):hover {    
+    cursor: pointer;
+    transform: scale(1.2);
+}
+.checkbox:checked + #labelCheck {
+    background-color: #FFA785;
+}
+.checkbox.occupied:checked + #labelCheck {
+    background-color: #FFFFFF;
+}
+.checkbox:checked + #labelCheck:before {
+    width: 0;
+    height: 0;
+}
+.checkbox:checked + #labelCheck #tick_mark:before, .checkbox:checked + #labelCheck #tick_mark:after {
+    transform: translate(0);
+    opacity: 1;
+}
+.showcase #labelCheck:not(.occupied):hover {
+    cursor: default;
+}
+.showcase {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #777;
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+}
+.showcase li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 10px;
+}
+.showcase li small {
+    margin-left: 2px;
+}
+.row-showtime {
+    display: flex;
+}
+.movie-screen {
+    margin-top: 35px;
+    margin-bottom: 35px;
+    text-align: center;
+}
+@media (max-width: 576px) {
+    #labelCheck {
+        height: 16px;
+        width: 20px;
+    }
+    #labelCheck:nth-of-type(2) {
+        margin-right: 12px;
+    }
+    #labelCheck:nth-last-of-type(2) {
+        margin-left: 12px;
+    }
+    .movie-screen {
+        margin-top: 25px;
+        margin-bottom: 20px;
+    }
+    #count,
+    #total {
+        font-size: 18px
+    }
+}

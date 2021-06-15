@@ -1,0 +1,126 @@
+<%- include('../../partials/headerAdmin.ejs') %>
+
+<script>
+    function searchAdd() {
+      // Declare variables
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("search-input-add");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("table-add");
+      tr = table.getElementsByTagName("tr");
+    
+      // Loop through all table rows, and hide those who don't match the search query
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[1];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+
+    function searchRemove() {
+      // Declare variables
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("search-input-remove");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("table-remove");
+      tr = table.getElementsByTagName("tr");
+    
+      // Loop through all table rows, and hide those who don't match the search query
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[1];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+</script>
+<div class="py-5">
+    <h2 class="fw-bold">
+        <a href="/admin/cinema" class="back-link">
+            <i class="far fa-chevron-left fw-bold pe-2" aria-hidden="true"></i>
+        </a>
+        <%= cinema.branch %>
+    </h2>
+    <hr class="mb-5">
+    <div class="row">
+        <div class="col-xl-6 border p-3">
+            <div class="d-flex justify-content-between">
+                <h2 class="fw-bold">Add movie</h2>
+                <div class="d-flex">
+                    <input type="text" class="form-control" id="search-input-add" onkeyup="searchAdd()" placeholder="Search for branch">
+                </div> 
+            </div>
+            <hr>
+            <table class="table" id="table-add">
+                <thead class="h3">
+                    <tr class="align-top">
+                      <th scope="col" class="text-center">Poster</th>
+                      <th scope="col">Name</th>
+                      <th scope="col" class="text-center">Release date</th>
+                      <th scope="col" class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="h5">
+                    <% movieAdd.forEach(function(movie){ %>
+                    <tr class="align-middle">
+                        <td scope="col" class="text-center"><img src="<%= movie.poster %>" class="img-poster-edit"></td>
+                        <td scope="col"><%= movie.name %></td>
+                        <td scope="col" class="text-center"><%= movie.date %></td>
+                        <td scope="col" class="text-center">
+                            <form action="/admin/cinema/<%= cinema._id %>/addmovie/<%= movie._id %>" method="POST">
+                                <button class="bg-transparent border-0" title="Add movie to cinema"><i class="fad fa-plus-circle fa-2x text-success"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-xl-6 border p-3">
+            <div class="d-flex justify-content-between">
+                <h2 class="fw-bold">Remove movie</h2>
+                <div class="d-flex">
+                    <input type="text" class="form-control" id="search-input-remove" onkeyup="searchRemove()" placeholder="Search for branch">
+                </div> 
+            </div>
+            <hr>
+            <table class="table" id="table-remove">
+                <thead class="h3">
+                    <tr class="align-top">
+                      <th scope="col" class="text-center">Poster</th>
+                      <th scope="col">Name</th>
+                      <th scope="col" class="text-center">Release date</th>
+                      <th scope="col" class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="h5">
+                    <% movieRemove.forEach(function(movie){ %>
+                    <tr class="align-middle">
+                        <td scope="col" class="text-center"><img src="<%= movie.poster %>" class="img-poster-edit"></td>
+                        <td scope="col"><%= movie.name %></td>
+                        <td scope="col" class="text-center"><%= movie.date %></td>
+                        <td scope="col" class="text-center">
+                            <form action="/admin/cinema/<%= cinema._id %>/removemovie/<%= movie._id %>" method="POST">
+                                <button class="bg-transparent border-0" title="Remove movie from cinema"><i class="fad fa-minus-circle fa-2x text-danger"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<%- include('../../partials/footerAdmin.ejs') %>

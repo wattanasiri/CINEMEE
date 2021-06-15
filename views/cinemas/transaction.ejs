@@ -1,0 +1,163 @@
+<%- include('../partials/header.ejs') %>
+
+<div class="container">
+    <h2 class="text-light mt-5">
+        <a href="/cinema/<%= cinema._id %>/showtime/<%= showtime._id%>" class="me-2 text-light"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+        Back<hr>
+    </h2>
+    <div class="row">
+        <div class="col-xl-8 col-md-12">
+            <div class="row d-flex px-5 mt-5">                
+                <% if(seatNo.length > 1){ %>
+                <% seatNo.forEach(function(seatNo){ %>
+                    <div class="ticketWrap mb-5">
+                        <div class="ticket ticketLeft">
+                            <h2 style="font-weight: bold;">
+                                <i class="far fa-ticket-alt me-2"></i>
+                                SNEEMEE
+                            </h2>
+                            <div class="movie">
+                                <h2><%= showtime.movie.name %></h2>
+                                <span>MOVIE</span>
+                            </div>
+                            <div class="name">
+                                <h2>Username</h2>
+                                <span>NAME</span>
+                            </div>
+                            <div class="seat text-center">
+                                <h2><%= seatNo %></h2>
+                                <span>SEAT</span>
+                            </div>
+                            <div class="time text-center">
+                                <h2><%= showtime.time %></h2>
+                                <span>TIME</span>
+                            </div>                          
+                        </div>
+                        <div class="ticket ticketRight text-center">
+                            <div class="eye mt-1"></div>
+                            <div class="number">
+                                <h3><%= seatNo %></h3>
+                                <span>seat</span>
+                            </div>
+                            <div class="QrCode mt-2 mx-auto">
+                                <img src="/img/QRcode.jpg" class="w-100">
+                            </div>                         
+                        </div>                      
+                    </div>
+                <% }); %>
+                <% }else{ %>
+                    <div class="ticketWrap">
+                        <div class="ticket ticketLeft">
+                            <h2 style="font-weight: bold;">
+                                <i class="far fa-ticket-alt me-2"></i>
+                                CINEMEE
+                            </h2>
+                            <div class="movie">
+                                <h2><%= showtime.movie.name %></h2>
+                                <span>MOVIE</span>
+                            </div>
+                            <div class="name">
+                                <h2><%= currentUser.firstname %></h2>
+                                <span>NAME</span>
+                            </div>
+                            <div class="seat text-center">
+                                <h2><%= seatNo %></h2>
+                                <span>SEAT</span>
+                            </div>
+                            <div class="time text-center">
+                                <h2><%= showtime.time %></h2>
+                                <span>TIME</span>
+                            </div>                          
+                        </div>
+                        <div class="ticket ticketRight text-center">
+                            <div class="eye"></div>
+                            <div class="number">
+                                <h3><%= seatNo %></h3>
+                                <span>seat</span>
+                            </div>
+                            <div class="QrCode mt-2 mx-auto">
+                                <img src="/img/QRcode.jpg" class="w-100">
+                            </div>                         
+                        </div>                      
+                    </div>
+                <% } %>
+            </div>
+        </div>
+        <div class="col-xl-4 col-sm-12 mt-5">
+            <div class="bg-light w-100" style="height: 600px;">
+                <div class="p-3">
+                    <div class="d-flex justify-content-center">
+                        <img src="/img/CINEMEE-logo-red(only).png" height="80px">
+                    </div>
+                    <hr>
+                    <div class="px-2">
+                        <div class="row my-2">
+                            <h5 class="col-5" style="font-weight: 600;">Branch</h5>
+                            <h5 class="text-end col-7"><%= cinema.branch %></h5>
+                        </div>
+                        <div class="row my-2">
+                            <h5 class="col-5" style="font-weight: 600;">Movie Title</h5>
+                            <h5 class="text-end col-7"><%= showtime.movie.name %></h5>
+                        </div>
+                        <div class="row my-2">
+                            <h5 class="col-5" style="font-weight: 600;">Date</h5>
+                            <h5 class="text-end col-7"><%= showtime.date %></h5>
+                        </div>
+                        <div class="row my-2">
+                            <h5 class="col-5" style="font-weight: 600;">Showtime</h5>
+                            <h5 class="text-end col-7"><%= showtime.time %></h5>
+                        </div>
+                        <div class="row my-2">
+                            <h5 class="col-5" style="font-weight: 600;">Theater No.</h5>
+                            <h5 class="text-end col-7"><%= theater.theaterNo %></h5>
+                        </div>
+                        <div class="row mt-2">
+                            <h5 class="col-5" style="font-weight: 600;">Selected Seat</h5>
+                            <h5 class="text-end col-7"><%= seatNo %></h5>
+                            <div class="px-3 mt-2">
+                                <hr class="mb-0">
+                                <hr class="mt-1">
+                            </div>
+                        </div>
+                        <div class="row">                        
+                            <h6 class="col-5" style="font-weight: 600;">Sub Total:</h6>
+                            <h6 class="text-end col-7"><%= subTotal.toFixed(2) %> Bath</h6>
+                        </div>  
+                        <div class="row">                        
+                            <h6 class="col-5" style="font-weight: 600;">VAT (7%):</h6>
+                            <h6 class="text-end col-7"><%= vat.toFixed(2) %> Bath</h6>
+                        </div>                    
+                        <div class="row">                        
+                            <h5 class="col-5" style="font-weight: bolder;">Total:</h5>
+                            <h5 class="text-end col-7"><%= total.toFixed(2) %> Bath</h5>
+                        </div>
+                    </div>
+                </div>
+                <form action="/cinema/<%= cinema._id %>/showtime/<%= showtime._id %>/checkout" method="POST">
+                    <input class="visually-hidden" value="<%= currentUser._id %>" type="text" name="transaction[customer]">
+                    <input class="visually-hidden" value="<%= cinema.branch %>" type="text" name="transaction[branch]">
+                    <input class="visually-hidden" value="<%= showtime.movie.name %>" type="text" name="transaction[movie]">
+                    <input class="visually-hidden" value="<%= showtime.date %>" type="text" name="transaction[date]">
+                    <input class="visually-hidden" value="<%= showtime.time %>" type="text" name="transaction[showtime]">
+                    <input class="visually-hidden" value="<%= theater.theaterNo %>" type="text" name="transaction[theater]">
+                    <input class="visually-hidden" value="<%= seatNo %>" type="text" name="transaction[seat]">
+                    <input class="visually-hidden" value="<%= total %>" type="number" name="transaction[total]">
+                    <div style="height: 93px;" class="m-0 p-0">
+                        <button class="w-100 h-100 checkout rounded-0">
+                            <span>Check Out</span>
+                        </button>
+                        <% if(seatNo.length > 1){ %>                    
+                            <% seatNo.forEach(function(seatNo){ %>
+                            <input class="visually-hidden" value="<%= seatNo %>" type="text" name="seatNo">
+                            <% }); %>
+                        <% }else{ %>
+                        <input class="visually-hidden" value="<%= seatNo %>" type="text" name="seatNo">
+                        <% } %>
+                    </div>                    
+                </form>
+            </div>            
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer.ejs') %>

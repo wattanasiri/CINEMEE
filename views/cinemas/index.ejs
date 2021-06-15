@@ -1,0 +1,55 @@
+<%- include('../partials/header.ejs') %>
+
+<div class="container mt-5">
+    <h2 class="text-light container py-3 fw-bold">Branch</h2>
+    <div class="row mb-5">
+        <% cinema.forEach(function(cinema){ %>
+            <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 pt-4">      
+                <div class="card-cinema border-0">
+                    <div class="wrapper-home">                    
+                        <div class="header-card-cinema">                      
+                            <ul class="menu-content ">
+                                <li>
+                                    <% if(!currentUser){ %>
+                                        <form action="/cinema/<%= cinema._id %>/addFavorite" method="POST">
+                                            <input value="<%= cinema._id %>" name="cinema" class="visually-hidden">
+                                            <button title="Add to favorite"><i class="fa fa-heart-o fa-xl text-light"></i></button>
+                                        </form>
+                                    <% }else{ let j = 0; %> 
+                                        <% currentUser.favoriteCinema.forEach(function(favCinema){ %>
+                                        <% if(favCinema.equals(cinema._id)){ j++; }%>
+                                        <% }); %>
+                                        <% if(j > 0){ %>
+                                            <form action="/cinema/<%= cinema._id %>/removeFavorite" method="POST">
+                                                <input value="<%= cinema._id %>" name="cinema" class="visually-hidden">
+                                                <button title="Add to favorite"><i class="fa fa-heart-o fa-xl text-danger"></i></button>
+                                            </form>
+                                        <% }else{ %>
+                                            <form action="/cinema/<%= cinema._id %>/addFavorite" method="POST">
+                                                <input value="<%= cinema._id %>" name="cinema" class="visually-hidden">
+                                                <button title="Add to favorite"><i class="fa fa-heart-o fa-xl text-light"></i></button>
+                                            </form>
+                                        <% } %>
+                                    <% } %>
+                                </li>                                
+                            </ul>
+                        </div>                    
+                        <div class="data">                      
+                            <div class="content" style="transform: rotate(0);">                 
+                                <h4 class="movie-title" style="font-weight: 700;"><%= cinema.branch %></h4>
+                                <p class="text">
+                                <p><i class="far fa-camera-movie me-3" aria-hidden="true"></i>Movie available <%= cinema.movies.length %></p>
+                                <p><i class="far fa-popcorn me-3" aria-hidden="true"></i><%= cinema.theater.length %> Theater</p>
+                                </p>    
+                                <a href="/cinema/<%= cinema._id %>" class="stretched-link"></a>                    
+                            </div>
+                            <a href="/cinema/<%= cinema._id %>" class="button">Show more</a>
+                        </div>
+                    </div>
+                </div>          
+              </div> 
+        <% }); %>
+    </div>
+</div>
+
+<%- include('../partials/footer.ejs') %>

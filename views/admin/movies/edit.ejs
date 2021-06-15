@@ -1,0 +1,100 @@
+<%- include('../../partials/headerAdmin.ejs') %>
+
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/js/standalone/selectize.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/css/selectize.min.css">
+<script>
+    $(function() {
+        $('select').selectize();
+    });     
+    let loadFilePoster = function(event) {
+    let output = document.getElementById('poster');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function() {
+            URL.revokeObjectURL(output.src)
+        }
+    };
+</script>
+
+<div class="p-5">
+    <div>
+        <h2 class="fw-bold">
+            <a href="/admin/movie" class="back-link">
+                <i class="far fa-chevron-left fw-bold pe-2" aria-hidden="true"></i>
+            </a>
+            Edit movie
+        </h2>
+    </div> 
+    <hr>
+    <form action="/admin/movie/<%= movie._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-4">
+                <img src="<%= movie.poster %>" id="poster" class="card-img-top rounded">               
+            </div>
+            <div class="col-8">            
+                <div class="pt-3 px-5">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="Name" name="movie[name]" value="<%= movie.name %>" required>
+                        <label for="floatingInput">Name</label>
+                    </div>
+                </div>
+                <div class="pt-3 px-5">
+                    <div class="form-floating">
+                        <input class="form-control" type="date" name="movie[date]" id="example-date-input" value="<%= movie.date %>" required>
+                        <label for="floatingInput">Release date</label>
+                    </div>
+                </div>
+                <div class="pt-3 px-5">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="Link (Embed)" name="movie[trailer]" value="<%= movie.trailer %>" required>
+                        <label for="floatingInput">Trailer link (Embed)</label>
+                    </div>
+                </div>
+                <div class="pt-3 px-5"> 
+                    <label for="form-select" class="pb-1 ps-1">Type</label>                  
+                    <select name="movie[type]" multiple required>
+                        <option value="Action">Action</option>
+                        <option value="Adventure">Adventure</option>
+                        <option value="Comedy">Comedy</option>
+                        <option value="Crime">Crime</option>
+                        <option value="Drama">Drama</option>
+                        <option value="Fantasy">Fantasy</option>
+                        <option value="History">History</option>
+                        <option value="Horror">Horror</option>                                
+                        <option value="Thriller">Thriller</option>
+                        <option value="Musical">Musical</option>
+                        <option value="Mystery">Mystery</option>
+                        <option value="Romance">Romance</option>
+                        <option value="Sci-Fi">Sci-Fi</option>
+                    </select>
+                    <div class="text-secondary">Now: <%= movie.type %></div>
+                </div>
+                <div class="pt-3 px-5">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="Time" name="movie[time]" value="<%= movie.time %>" required>
+                        <label for="floatingInput">Time</label>
+                    </div>
+                </div>
+                <div class="pt-3 px-5">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="Description" name="movie[desc]" value="<%= movie.desc %>" required>
+                        <label for="floatingInput">Description</label>
+                    </div>
+                </div>
+                <div class="pt-3 px-5">                    
+                    <div>
+                        <label for="formFile" class="pb-1 ps-1">Poster</label>
+                        <input type="file" class="form-control" id="floatingInput" name="poster" accept="image/*" onchange="loadFilePoster(event)">
+                    </div>
+                </div>
+                <div class="pt-5 text-center">
+                    <button class="btn btn-lg btn-primary px-5" type="submit">Submit</button>
+                </div>                    
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<%- include('../../partials/footerAdmin.ejs') %>

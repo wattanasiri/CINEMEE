@@ -1,0 +1,45 @@
+<%- include('../../partials/headerAdmin.ejs') %>
+
+<script>
+    let loadFilePromotion = function(event) {
+        let output = document.getElementById('promotion-pic');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function() {
+            URL.revokeObjectURL(output.src)
+        }
+    };
+</script>
+<div class="p-5">
+    <div>
+        <h2 class="fw-bold">
+            <a href="/admin/promotion" class="back-link">
+                <i class="far fa-chevron-left fw-bold pe-2" aria-hidden="true"></i>
+            </a>
+            Edit Promotion
+        </h2>
+    </div> 
+    <hr>    
+    <form action="/admin/promotion/<%= promotion._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+        <div class="pt-3 px-5 mx-5">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="floatingInput" placeholder="Title" value="<%= promotion.title %>" name="promotion[title]" required>
+                <label for="floatingInput">Title</label>
+            </div>
+        </div>
+        <div class="pt-3 px-5 mx-5">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="floatingInput" placeholder="Description" value="<%= promotion.desc %>" name="promotion[desc]" required>
+                <label for="floatingInput">Description</label>
+            </div>
+        </div>
+        <div class="pt-3 px-5 mx-5">          
+            <label for="formFile" class="pb-1 ps-1">Image</label>
+            <input type="file" class="form-control" id="floatingInput" name="image" accept="image/*" onchange="loadFilePromotion(event)">        
+        <div class="pt-5 text-center">
+            <button class="btn btn-lg btn-success px-5" type="submit">Submit</button>
+        </div>        
+    </form>
+    <img src="<%= promotion.image %>" id="promotion-pic" class="card-img-top rounded pt-5 w-100">
+</div>
+
+<%- include('../../partials/footerAdmin.ejs') %>

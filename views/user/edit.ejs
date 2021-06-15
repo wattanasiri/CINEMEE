@@ -1,0 +1,55 @@
+<%- include('../partials/header.ejs') %>
+<script>
+    let loadFile = function(event) {
+        let output = document.getElementById('output');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function() {
+            URL.revokeObjectURL(output.src)
+        }
+    };
+</script>
+
+<div class="container pt-5 mt-4">
+    <div class="text-light container">
+        <h2 class="fw-bold">My profile</h2>
+    </div>
+</div>
+<div class="container-profile">
+    <div class="container-profile-inner">
+        <form action="/profile/<%= user._id %>/edit?_method=PUT" method="POST" enctype="multipart/form-data">
+            <div class="row">                
+                <div class="col-xl-4 col-sm-12 px-5">
+                    <div class="card bg-transparent border-5 rounded-0 border-light img-edit">
+                        <img src="<%= user.image%>" class="profile-pic-edit" id="output">                   
+                        <span class="label-edit">Change picture</span>
+                        <input type="file" class="change-pic text-dark" id="upload-box" name="image" accept="image/*" onchange="loadFile(event)">
+                    </div>
+                </div>
+                <div class="col-xl-2 col-sm-6 text-light">
+                    <h2 class="fw-bold mt-3">First name</h2>
+                    <h2 class="fw-bold mt-3">Last name</h2>
+                    <h4 class="fw-bold mt-3">Username</h4>
+                    <h4 class="fw-bold mt-3">Email</h4>
+                      
+                </div>
+                <div class="col-xl-4 text-light col-sm-6">
+                    <input class="mt-3 h2" maxlength="20" value="<%= user.firstname %>" type="text" name="user[firstname]" placeholder="<%= user.firstname %>" required>
+                    <input class="mt-1 h2" maxlength="20" value="<%= user.lastname %>" type="text" name="user[lastname]" placeholder="<%= user.lastname %>" required>
+                    <input class="mt-1 h4" maxlength="20" value="<%= user.username %>" name="user[username]" placeholder="<%= user.username %>" required>
+                    <input class="mt-1 h4" maxlength="30" value="<%= user.email %>" type="email" name="user[email]" placeholder="<%= user.email %>" required>                    
+                </div>                
+            </div>
+            <div class="row pt-5">
+                <div class="col-4"></div>
+                <div class="col-2 ps-5">
+                    <button class="btn btn-submit" type="submit">Submit</button>   
+                </div>
+                <div class="col-2 pe-5">
+                    <a class="btn btn-secondary" href="/profile/<%= user._id %>" style="padding-top: 12px;" type="submit">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<%- include('../partials/footer.ejs') %>

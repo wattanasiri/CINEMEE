@@ -1,0 +1,75 @@
+<%- include('../../partials/headerAdmin.ejs') %>
+
+<script>
+  function searchPromotion() {
+    // Declare variables
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("search-input-promotion");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("table-promotion");
+    tr = table.getElementsByTagName("tr");
+  
+    // Loop through all table rows, and hide those who don't match the search query
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[1];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+</script>
+
+<div class="py-5">
+    <div class="d-flex justify-content-between">
+      <h2 class="fw-bold">Promotion
+        <a href="/admin/promotion/new" class="btn btn-primary">
+          <i class="fal fa-plus" aria-hidden="true"></i>&nbspAdd new promotion
+        </a>
+      </h2>        
+      <div>    
+        <input type="text" class="form-control" id="search-input-promotion" onkeyup="searchPromotion()" placeholder="Search for name">
+      </div>
+    </div>
+    <hr>
+    <table class="table" id="table-promotion">
+        <thead class="h3" style="word-wrap: break-word; table-layout: fixed">
+            <tr class="align-top">
+              <th scope="col" class="text-center" style="width: 50%;">Image</th>
+              <th scope="col" style="width: 15%;">Title</th>
+              <th scope="col" style="width: 25%;">Description</th>
+              <th scope="col" class="text-center" style="width: 10%;">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="h5">        
+        <% promotion.forEach(function(promotion){ %>
+            <tr class="align-middle">
+                <td scope="col" class="text-center"><img src="<%= promotion.image %>" class="w-100"></td>
+                <td scope="col"><%= promotion.title %></td>
+                <td scope="col"><%= promotion.desc %></td>
+                <td scope="col" class="text-center">
+                    <button class="border-0 bg-transparent dropdown-toggle" type="button" id="defaultDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false"><i class="fad fa-cogs fa-2x"></i></button>
+                    <ul class="dropdown-menu" aria-labelledby="defaultDropdown">              
+                        <li style="position: relative;">
+                            <form action="/admin/promotion/<%= promotion._id%>/edit" method="GET">
+                                <button class="border-0 bg-transparent py-2 px-3 stretched-link"><i class="fal fa-edit me-2"></i>Edit</button>
+                            </form>
+                        </li>
+                        <li style="position: relative;">
+                            <form action="/admin/promotion/<%= promotion._id %>?_method=DELETE" method="POST" onsubmit="if(!confirm('Confirm this action?')){return false;}">
+                                <button class="border-0 bg-transparent py-2 px-3 stretched-link"><i class="fal fa-trash me-2"></i>Delete</button>
+                            </form>
+                        </li>
+                    </ul>     
+                </td>
+            </tr>
+        <% }); %>
+        </tbody>
+    </table>
+</div>
+
+<%- include('../../partials/footerAdmin.ejs') %>

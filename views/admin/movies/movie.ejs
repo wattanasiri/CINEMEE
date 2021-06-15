@@ -1,0 +1,84 @@
+<%- include('../../partials/headerAdmin.ejs') %>
+
+<script>
+  function searchMovie() {
+    // Declare variables
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("search-input-movie");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("table-movie");
+    tr = table.getElementsByTagName("tr");
+  
+    // Loop through all table rows, and hide those who don't match the search query
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[1];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+</script>
+
+<div class="py-5">
+    <div class="d-flex justify-content-between">
+      <h2 class="fw-bold">Movie
+        <a href="/admin/movie/new" class="btn btn-primary">
+          <i class="fal fa-plus" aria-hidden="true"></i>&nbspAdd new movie
+        </a>
+      </h2>        
+      <div>    
+        <input type="text" class="form-control" id="search-input-movie" onkeyup="searchMovie()" placeholder="Search for name">
+      </div>
+    </div>
+    <hr>
+    <table class="table" id="table-movie" style="word-wrap: break-word; table-layout: fixed;">
+        <thead class="h3">
+            <tr class="align-top">
+              <th scope="col" class="text-center">Poster</th>
+              <th scope="col">Name</th>
+              <th scope="col">Type</th>
+              <th scope="col" class="text-center">Release date</th>
+              <th scope="col" class="text-center">Time</th>
+              <th scope="col" class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="h5">        
+        <% movie.forEach(function(movie){ %>
+            <tr class="align-middle">
+                <td scope="col" class="text-center"><img src="<%= movie.poster %>" class="img-poster"></td>
+                <td scope="col"><%= movie.name %></td>
+                <td scope="col"><%= movie.type %></td>
+                <td scope="col" class="text-center"><%= movie.date %></td>
+                <td scope="col" class="text-center"><%= movie.time %></td>
+                <td scope="col" class="text-center">
+                    <button class="border-0 bg-transparent dropdown-toggle" type="button" id="defaultDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false"><i class="fad fa-cogs fa-2x"></i></button>
+                    <ul class="dropdown-menu" aria-labelledby="defaultDropdown">                        
+                        <li style="position: relative;">
+                            <form action="/admin/movie/<%= movie._id %>/info" method="GET">
+                                <button class="border-0 bg-transparent py-2 px-3 stretched-link"><i class="far fa-info-circle me-2"></i>Info</button>
+                            </form>
+                        </li>
+                        <li style="position: relative;">
+                            <form action="/admin/movie/<%= movie._id%>/edit" method="GET">
+                                <button class="border-0 bg-transparent py-2 px-3 stretched-link"><i class="fal fa-edit me-2"></i>Edit</button>
+                            </form>
+                        </li>
+                        <li style="position: relative;">
+                            <form action="/admin/movie/<%= movie._id %>?_method=DELETE" method="POST" onsubmit="if(!confirm('Confirm this action?')){return false;}">
+                                <button class="border-0 bg-transparent py-2 px-3 stretched-link"><i class="fal fa-trash me-2"></i>Delete</button>
+                            </form>
+                        </li>
+                    </ul>     
+                </td>
+            </tr>
+        <% }); %>
+        </tbody>
+    </table>
+</div>
+
+<%- include('../../partials/footerAdmin.ejs') %>
